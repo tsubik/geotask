@@ -5,6 +5,7 @@ var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var order = require('gulp-order');
 var clean = require('gulp-clean');
+var runSequence = require('run-sequence');
 
 var paths = {
   sass: ['./app/styles/**/*.scss'],
@@ -13,7 +14,7 @@ var paths = {
   lib: ['./app/lib/**/*']
 };
 
-gulp.task('sass', ['clean'], function(done) {
+gulp.task('sass', function(done) {
   return gulp.src(paths.sass)
     .pipe(sass())
     .pipe(gulp.dest('./www/css/'))
@@ -24,7 +25,7 @@ gulp.task('sass', ['clean'], function(done) {
     .pipe(gulp.dest('./www/css/'));
 });
 
-gulp.task('scripts', ['clean'], function(){
+gulp.task('scripts', function(){
   return gulp.src(paths.js)
     .pipe(order([
       'utility/*.js',
@@ -38,12 +39,12 @@ gulp.task('scripts', ['clean'], function(){
     .pipe(gulp.dest('./www/js/'));
 });
 
-gulp.task('html', ['clean'], function(){
+gulp.task('html', function(){
   return gulp.src(paths.html)
     .pipe(gulp.dest('./www/'));
 });
 
-gulp.task('lib', ['clean'], function(){
+gulp.task('lib', function(){
   return gulp.src(paths.lib)
     .pipe(gulp.dest('./www/lib'));
 });
@@ -60,6 +61,6 @@ gulp.task('watch', function() {
   gulp.watch(paths.lib, ['lib']);
 });
 
-gulp.task('build', ['sass','scripts','html','lib'])
-
-gulp.task('default', ['build']);
+gulp.task('default', function(callback) {
+  runSequence('clean', ['sass','scripts','html','lib'], callback);
+});
