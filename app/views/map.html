@@ -1,0 +1,23 @@
+<ion-view title="{{locationName}}">
+    <ion-nav-bar type="bar-positive" animation="nav-title-slide-ios7">
+        <button class="button button-icon" ng-click="goBack()">
+            <i class="ion-arrow-left-c"></i>
+        </button>
+        <div class="buttons pull-right">
+            <button class="button button-icon icon ion-edit" ng-click="edit()"></button>
+            <button class="button button-icon icon ion-checkmark" ng-click="save()"></button>
+        </div>
+    </ion-nav-bar>
+    <ion-content>
+        <div class="button-bar">
+            <a class="button" ng-class=" whenIgetCloser ? 'button-positive' : 'button-light'" ng-click="chooseWhenIgetCloser()">Gdy się zbliżę</a>
+            <a class="button" ng-class=" whenIgetCloser ? 'button-light' : 'button-positive'" ng-click="chooseWhenIamLeaving()">Gdy się oddalę</a>
+        </div>
+        <div class="range">
+          na
+          <input type="range" name="volume" min="0" max="20000" ng-model="paths.circle.radius">
+          {{ paths.circle.radius }}m 
+        </div>
+        <leaflet defaults="defaults" markers="markers" paths="paths" center="map.center" height="480px"></leaflet>
+    </ion-content>
+</ion-view>

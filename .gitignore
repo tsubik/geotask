@@ -1,0 +1,8 @@
+node_modules/
+*.keystore
+*.sw*
+platforms
+plugins
+.idea
+/www/**/*
+app/components

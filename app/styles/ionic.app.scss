@@ -1,0 +1,76 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #4a87ee !default;
+$calm:                            #43cee6 !default;
+$balanced:                        #66cc33 !default;
+$energized:                       #f0b840 !default;
+$assertive:                       #ef4e3a !default;
+$royal:                           #8a6de9 !default;
+$dark:                            #444 !default;
+*/
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+// Include all of Ionic
+@import "app/lib/ionic/scss/ionic";
+
+form i.icon.error {
+  color: #ef4e3a; }
+
+form input + i.icon.error {
+  display: none;
+  margin-left: 8px; }
+
+form.ng-submitted input.ng-invalid + i.icon.error {
+  display: block; }
+
+form .has-error {
+  border-left: 5px solid #cc2511; }
+
+form .has-success {
+  border-left: 5px solid #3d8b3d; }
+
+form.ng-submitted input.ng-valid + i.icon.error {
+  display: none; }
+
+.map { height: 400px; }
+
+.item.selected {
+    background-color: $calm;
+    p, h2, h3 {
+        color: $light;
+    }
+}
+
+button.dayofweek {
+  font-size: 10px;
+  float: left;
+  display:block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  width:50px;
+  height:50px;
+  line-height:50px;
+  border-radius: 50%;
+  padding: 0px;
+}
+
+div.days-of-week{
+  padding: 5px;
+}
+
+.item-task-done{
+  text-decoration: line-through; 
+  font-style: italic
+}
+
+input.underlined{
+  border-bottom: 1px solid;
+}

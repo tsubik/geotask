@@ -1,0 +1,22 @@
+<ion-view title="Wykonane">
+    <ion-nav-bar type="bar-positive" animation="nav-title-slide-ios7">
+        <button class="button button-icon" menu-toggle="left">
+            <i class="icon ion-navicon"></i>
+        </button>
+    </ion-nav-bar>
+    <ion-content>
+        <ion-list can-swipe="true">
+            <ion-item class="item icon-left" ng-repeat="task in tasks">
+                <i class="icon ion-checkmark-circled"></i>
+                <span class="item-task-done">
+                    {{task.note}}
+                </span>
+            </ion-item>
+        </ion-list>
+        <div class="card" ng-if="tasks.length === 0">
+            <div class="item item-text-wrap">
+                Nie wykonano jeszcze żadnych zadań.
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,29 @@
+<ion-view title="Wybierz lokalizację" ng-controller="SelectLocationCtrl">
+    <ion-nav-bar type="bar-positive" animation="nav-title-slide-ios7">
+        <button class="button button-icon" ng-click="goBackToTask()">
+            <i class="ion-arrow-left-c"></i> Zadanie
+        </button>
+    </ion-nav-bar>
+    <ion-content>
+        <ion-list can-swipe="true">
+            <ion-item>
+                <label class="item item-input">
+                    <ion-search-place placeholder="Wpisz adres, wyszukaj miejsce" ng-model="location" />
+                </label>
+            </ion-item>
+            <ion-item ng-click="selectCurrentLocation()" ng-if="currentPosition" class="item item-icon-left">
+                <i class="icon ion-location"></i>
+                <h2>Bieżąca lokalizacja</h2>
+            </ion-item>
+            <ion-item ng-click="selectLocation(location)" class="item item-icon-left" ng-repeat="location in locations">
+                <i class="icon ion-location"></i>
+                <h2>{{location.name}}</h2>
+            </ion-item>
+        </ion-list>
+        <div class="card" ng-if="locations.length === 0">
+            <div class="item item-text-wrap">
+                Nie zdefiniowano jeszcze żadnych lokalizacji.
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

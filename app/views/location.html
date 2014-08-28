@@ -1,0 +1,12 @@
+<ion-view title="{{location.name}}">
+    <ion-nav-bar type="bar-positive" animation="nav-title-slide-ios7">
+        <a ui-sref="app.locations" class="button icon-left ion-chevron-left button-clear button-dark">Lokalizacje</a>
+
+        <div class="buttons pull-right">
+            <button class="button pull-right button-icon icon ion-edit" ng-click="edit()"></button>
+        </div>
+    </ion-nav-bar>
+    <ion-content>
+        <leaflet defaults="defaults" markers="markers" center="map.center" height="480px"></leaflet>
+    </ion-content>
+</ion-view>

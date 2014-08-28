@@ -1,0 +1,42 @@
+<ion-view title="Zapamiętane lokalizacje">
+    <ion-nav-bar type="bar-positive">
+        <button class="button button-icon" menu-toggle="left">
+            <i class="icon ion-navicon"></i>
+        </button>
+    </ion-nav-bar>
+    <!--   <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons> -->
+    <ion-content>
+        <ion-list can-swipe="true">
+            <ion-item on-hold="locationOnHold(location)" ng-click="locationOnClick(location)" class="item item-icon-left" ng-class="{selected: location.selected}" ng-repeat="location in locations">
+                <i class="icon ion-location"></i>
+                <h2>{{location.name}}</h2>
+            </ion-item>
+        </ion-list>
+        <div class="card" ng-if="locations.length === 0">
+            <div class="item item-text-wrap">
+                Nie zdefiniowano jeszcze żadnych lokalizacji.
+            </div>
+        </div>
+
+
+    </ion-content>
+    <div ng-if="anyLocationsSelected()" class="bar bar-header">
+        <h1 class="title">{{ selectedLocationsCount() }} Zaznaczone</h1>
+        <button class="button button-clear" ng-click="cancelSelections()">
+            Anuluj
+        </button>
+    </div>
+
+    <div class="tabs tabs-icon-left" ng-if="anyLocationsSelected()">
+        <a class="tab-item" ng-if="onlyOneSelected()" ng-click="showSelected()">
+            <i class="icon ion-edit"></i>
+            Pokaż
+        </a>
+        <a class="tab-item" ng-click="removeSelectedLocations()">
+            <i class="icon ion-trash-b"></i>
+            Usuń
+        </a>
+    </div>
+</ion-view>
