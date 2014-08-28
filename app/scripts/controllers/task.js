@@ -9,7 +9,9 @@ angular.module('donebytheway.controllers')
         $scope.task = task;
 
         $scope.saveTask = function() {
+            taskService.addIfNotAdded(task);
             taskService.saveChanges();
+            taskService.createdTask = undefined;
             $state.go('app.tasks');
         };
 

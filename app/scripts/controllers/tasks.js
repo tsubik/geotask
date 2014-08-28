@@ -27,10 +27,8 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.addNewTask = function(){
-        var task = taskService.createNew();
-        taskService.tasks.push(task);
-        taskService.saveChanges();
-        $location.path('/task/'+task.id);
+        taskService.createdTask = taskService.createNew();
+        $location.path('/task/'+taskService.createdTask.id);
     };
 
     $scope.cancelSelections = function(){

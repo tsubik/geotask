@@ -3,6 +3,7 @@ angular.module('donebytheway.services')
         var taskService = {
             tasks: [],
             doneTasks: [],
+            createdTask: undefined,
             createNew: function() {
                 return {
                     id: UUIDjs.create().toString(),
@@ -19,10 +20,21 @@ angular.module('donebytheway.services')
                 this.remove(task);
                 this.doneTasks.push(task);
             },
+            addIfNotAdded: function(task){
+                if(!this.tasks.firstOrDefault(function(task) {
+                    return task.id === taskId;
+                })){
+                    this.tasks.push(task);
+                }
+            },
             remove: function(task){
                 this.tasks.splice(this.tasks.indexOf(task), 1);
             },
             findById: function(taskId) {
+                if(this.createdTask && this.createdTask.id === taskId){
+                    return this.createdTask;
+                }
+
                 return this.tasks.firstOrDefault(function(task) {
                     return task.id === taskId;
                 });
