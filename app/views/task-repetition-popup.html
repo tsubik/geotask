@@ -1,31 +1,35 @@
-<div ng-controller="TaskRepetitionCtrl">
-    <select 
-    ng-model="selectedFrequency" 
-    ng-options="item.value as item.title for item in frequencies"
-    ng-change="changeFrequency()"
-    ></select>
+<ion-modal-view>
+    <ion-header-bar>
+        <h1 class="title">Kiedy masz wykonać zadanie?</h1>
+    </ion-header-bar>
+    <ion-content class="task-repetition-modal-content">
+        <div ng-controller="TaskRepetitionCtrl">
+            <select ng-model="selectedFrequency" ng-options="item.value as item.title for item in frequencies" ng-change="changeFrequency()"></select>
 
-    <div ng-if="selectedFrequency == repetitionFrequency.WEEKLY" class="days-of-week">
-        <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.MONDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.MONDAY)">
-        	PON.
-        </button>
-        <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.TUESDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.TUESDAY)">
-        	WT.
-        </button>
-        <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.WEDNESDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.WEDNESDAY)">
-        	ŚR.
-        </button>
-        <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.THURSDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.THURSDAY)">
-        	CZW.
-        </button>
-        <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.FRIDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.FRIDAY)">
-        	PT.
-        </button>
-        <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.SATURDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.SATURDAY)">
-        	SOB.
-        </button>
-        <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.SUNDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.SUNDAY)">
-        	NIEDZ.
-        </button>
-    </div>
-</div>
+            <div ng-if="selectedFrequency == repetitionFrequency.WEEKLY" class="days-of-week">
+                <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.MONDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.MONDAY)">
+                    PON.
+                </button>
+                <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.TUESDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.TUESDAY)">
+                    WT.
+                </button>
+                <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.WEDNESDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.WEDNESDAY)">
+                    ŚR.
+                </button>
+                <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.THURSDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.THURSDAY)">
+                    CZW.
+                </button>
+                <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.FRIDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.FRIDAY)">
+                    PT.
+                </button>
+                <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.SATURDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.SATURDAY)">
+                    SOB.
+                </button>
+                <button class="button dayofweek" ng-class="isDayOfWeek(dayOfWeek.SUNDAY)? 'button-positive': 'button-light'" ng-click="toggleDay(dayOfWeek.SUNDAY)">
+                    NIEDZ.
+                </button>
+            </div>
+            <button class="button button-positive button-full" ng-click="closeRepetitionModal()">Gotowe</button>
+        </div>
+    </ion-content>
+</ion-modal-view>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com.tsubik.cordova.dbtw_background_service"
+    version="0.2.0">
+    <name>DBTWBackgroundService</name>
+    <description>Done by the way background service</description>
+    <license>MIT</license>
+    <keywords>phonegap,background geolocation</keywords>
+
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <dependency id="org.apache.cordova.geolocation" />
+
+    <!-- android -->
+    <platform name="android">
+        <source-file src="src/android/BTWService.java" target-dir="src/com/tsubik/btw_background_service" />
+        <source-file src="src/android/StartAppAtBootReceiver.java" target-dir="src/com/tsubik/btw_background_service" />
+        
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <service android:name="com.tsubik.cordova.dbtw_background_service.BTWService" android:enabled="true" android:process=":remote" />
+        </config-file>
+
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <receiver
+                android:name="com.tsubik.cordova.dbtw_background_service.StartAppAtBootReceiver">
+                <intent-filter>
+                    <action android:name="android.intent.action.BOOT_COMPLETED" />
+                </intent-filter>
+            </receiver>
+
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+        </config-file>
+
+     </platform>          
+
+</plugin>

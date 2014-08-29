@@ -54,7 +54,7 @@ gulp.task('clean', function(){
     .pipe(clean({force: true}));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch',['default'], function() {
   gulp.watch(paths.sass, ['sass']);
   gulp.watch(paths.js, ['scripts']);
   gulp.watch(paths.html, ['html']);

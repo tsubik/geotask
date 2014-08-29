@@ -8,18 +8,22 @@ angular.module('donebytheway.controllers')
         ];
         $scope.dayOfWeek = dayOfWeek;
         $scope.repetitionFrequency = repetitionFrequency;
-        $scope.selectedFrequency = $scope.model.repetition.frequency;
-        $scope.daysOfWeek = $scope.model.repetition.daysOfWeek;
+        $scope.selectedFrequency = $scope.task.repetition.frequency;
+        $scope.daysOfWeek = $scope.task.repetition.daysOfWeek;
 
         $scope.isDayOfWeek = function(dof){
-            return ($scope.model.repetition.daysOfWeek & dof);
+            return ($scope.task.repetition.daysOfWeek & dof);
         };
 
         $scope.toggleDay = function(dof){
-            $scope.model.repetition.daysOfWeek ^= dof;
+            $scope.task.repetition.daysOfWeek ^= dof;
         };
 
         $scope.changeFrequency = function(){
-            $scope.model.repetition = taskRepetitionService.createNew($scope.selectedFrequency);
+            $scope.task.repetition = taskRepetitionService.createNew($scope.selectedFrequency);
+        };
+
+        $scope.closeRepetitionModal = function(){
+            $scope.repetitionModal.hide();
         };
     });

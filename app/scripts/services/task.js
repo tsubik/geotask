@@ -21,8 +21,8 @@ angular.module('donebytheway.services')
                 this.doneTasks.push(task);
             },
             addIfNotAdded: function(task){
-                if(!this.tasks.firstOrDefault(function(task) {
-                    return task.id === taskId;
+                if(!this.tasks.firstOrDefault(function(t) {
+                    return t.id === task.id;
                 })){
                     this.tasks.push(task);
                 }

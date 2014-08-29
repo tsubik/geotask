@@ -1,5 +1,5 @@
 angular.module('donebytheway.controllers')
-    .controller('TaskCtrl', function($scope, $stateParams, $log, $location, $state, $ionicPopup, locationService, taskRepetitionService, repetitionFrequency, taskService) {
+    .controller('TaskCtrl', function($scope, $stateParams, $log, $location, $state, $ionicModal, locationService, taskRepetitionService, repetitionFrequency, taskService) {
         var taskId = $stateParams.taskId;
         task = taskService.findById(taskId);
         if (!task) {
@@ -7,6 +7,17 @@ angular.module('donebytheway.controllers')
         }
 
         $scope.task = task;
+
+        $ionicModal.fromTemplateUrl('views/task-repetition-popup.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.repetitionModal = modal;
+        });
+
+        $scope.$on('$destroy', function() {
+            $scope.repetitionModal.remove();
+        });
 
         $scope.saveTask = function() {
             taskService.addIfNotAdded(task);
@@ -20,7 +31,7 @@ angular.module('donebytheway.controllers')
             $location.path('/task/{0}/select-location'.format(taskId));
         };
 
-        $scope.changeLocationReminder = function(locationReminder){
+        $scope.changeLocationReminder = function(locationReminder) {
             locationService.selectedLocationReminder = locationReminder;
             $location.path('/task/{0}/location-map'.format(taskId));
         };
@@ -31,19 +42,6 @@ angular.module('donebytheway.controllers')
         };
 
         $scope.changeRepetition = function() {
-            $scope.model = {
-                repetition: task.repetition || taskRepetitionService.createNew(repetitionFrequency.DAILY)
-            };
-
-            var popup = $ionicPopup.show({
-                templateUrl: 'views/task-repetition-popup.html',
-                scope: $scope,
-                buttons: [{
-                    text: 'Gotowe',
-                    type: 'button-positive'
-                }]
-            }).then(function(res) {
-                task.repetition = $scope.model.repetition;
-            });
+            $scope.repetitionModal.show();
         }
     });
