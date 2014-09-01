@@ -17,8 +17,8 @@
 
     <!-- android -->
     <platform name="android">
-        <source-file src="src/android/BTWService.java" target-dir="src/com/tsubik/btw_background_service" />
-        <source-file src="src/android/StartAppAtBootReceiver.java" target-dir="src/com/tsubik/btw_background_service" />
+        <source-file src="src/android/BTWService.java" target-dir="src/com/tsubik/cordova/dbtw_background_service" />
+        <source-file src="src/android/StartAppAtBootReceiver.java" target-dir="src/com/tsubik/cordova/dbtw_background_service" />
         
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <service android:name="com.tsubik.cordova.dbtw_background_service.BTWService" android:enabled="true" android:process=":remote" />
