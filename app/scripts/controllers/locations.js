@@ -1,7 +1,11 @@
 angular.module('donebytheway.controllers')
 .controller('LocationsCtrl', function($scope, $log, $location, geolocation, locationService, taskService){
-	var locations = locationService.locations;
-    $scope.locations = locations;
+	$scope.locations = [];
+    locationService.getAll().then(function(locs){
+        $scope.$apply(function(){
+            $scope.locations = locs;
+        });
+    })
 
     var selectedLocation = function(item) { return item.selected; };
 
@@ -19,17 +23,17 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.cancelSelections = function(){
-        angular.forEach(locations, function(location){
+        angular.forEach($scope.locations, function(location){
             location.selected = false;
         });
     };
     $scope.showSelected = function(){
-    	var location = locations.filter(selectedLocation)[0];
+    	var location = $scope.locations.filter(selectedLocation)[0];
     	$location.path('/location/'+location.id)
     }
 
     $scope.removeSelectedLocations = function(){
-        var selectedLocations = locations.filter(selectedLocation);
+        var selectedLocations = $scope.locations.filter(selectedLocation);
         angular.forEach(selectedLocations, function(location){
             locationService.remove(location);
         });
@@ -37,12 +41,12 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.anyLocationsSelected = function(){
-        return locations.filter(selectedLocation).length > 0;
+        return $scope.locations.filter(selectedLocation).length > 0;
     };
     $scope.onlyOneSelected = function(){
-        return locations.filter(selectedLocation).length === 1;
+        return $scope.locations.filter(selectedLocation).length === 1;
     };
     $scope.selectedLocationsCount = function(){
-        return locations.filter(selectedLocation).length;
+        return $scope.locations.filter(selectedLocation).length;
     };
 });

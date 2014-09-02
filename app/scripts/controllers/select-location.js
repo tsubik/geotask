@@ -1,7 +1,10 @@
 angular.module('donebytheway.controllers')
 .controller('SelectLocationCtrl', function($scope, $log, $location, $stateParams, geolocation, locationService, taskService){
     var taskId = $stateParams.taskId;
-    $scope.locations = locationService.locations;
+    locationService.getAll().then(function(locations){
+        $scope.locations = locations;
+        $scope.digest();    
+    });
     $scope.location = '';
 
     geolocation.getCurrentPosition(function(position) {

@@ -38,15 +38,16 @@ angular.module('donebytheway.controllers')
         };
 
         function saveReminder(newLocation){
-            var task = taskService.findById(taskId);
-            locationReminder.location = newLocation;
-            locationReminder.radius = $scope.paths.circle.radius;
-            locationReminder.whenIgetCloser = $scope.whenIgetCloser;
+            taskService.findById(taskId).then(function(task){
+                locationReminder.location = newLocation;
+                locationReminder.radius = $scope.paths.circle.radius;
+                locationReminder.whenIgetCloser = $scope.whenIgetCloser;
 
-            if(task.locationReminders.indexOf(locationReminder) < 0){
-                task.locationReminders.push(locationReminder);    
-            }
-            taskService.saveChanges();
+                if(task.locationReminders.indexOf(locationReminder) < 0){
+                    task.locationReminders.push(locationReminder);    
+                }
+                taskService.saveChanges();
+            });
         };
 
         function saveReminderAndAddLocation(newLocation){

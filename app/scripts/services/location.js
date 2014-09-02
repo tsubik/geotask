@@ -15,7 +15,16 @@ angular.module('donebytheway.services')
             this.locations.splice(this.locations.indexOf(location), 1);
         },
         findById: function(locationId){
-            return this.locations.firstOrDefault(function(location){ return location.id === locationId; });
+            var self = this;
+            return self.initialized.then(function(){
+                return self.locations.firstOrDefault(function(location){ return location.id === locationId; });
+            });
+        },
+        getAll: function(){
+            var self = this;
+            return self.initialized.then(function(){
+                return self.locations;
+            });
         },
         saveChanges: function(){
             storage.setItem('donebytheway-locations', angular.toJson(this.locations));

@@ -1,5 +1,6 @@
 angular.module('ion-search-place', [])
     .directive('ionSearchPlace', [
+        'ionic',
         '$ionicTemplateLoader',
         '$ionicBackdrop',
         '$q',

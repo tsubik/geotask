@@ -1,5 +1,5 @@
 <ion-view title="Zapamiętane lokalizacje">
-    <ion-nav-bar type="bar-positive">
+    <ion-nav-bar class="bar-positive">
         <button class="button button-icon" menu-toggle="left">
             <i class="icon ion-navicon"></i>
         </button>
@@ -22,14 +22,14 @@
 
 
     </ion-content>
-    <div ng-if="anyLocationsSelected()" class="bar bar-header">
+    <div ng-if="anyLocationsSelected()" class="bar bar-positive bar-header">
         <h1 class="title">{{ selectedLocationsCount() }} Zaznaczone</h1>
         <button class="button button-clear" ng-click="cancelSelections()">
             Anuluj
         </button>
     </div>
 
-    <div class="tabs tabs-icon-left" ng-if="anyLocationsSelected()">
+    <div class="tabs tabs-positive tabs-icon-left" ng-if="anyLocationsSelected()">
         <a class="tab-item" ng-if="onlyOneSelected()" ng-click="showSelected()">
             <i class="icon ion-edit"></i>
             Pokaż

@@ -10,9 +10,9 @@ angular.module('donebytheway.controllers')
 
     function getTasksByState(){
         if($state.is('app.nearby-tasks')){
-            return taskService.findNearbyTasks();
+            return taskService.findNearby();
         } 
-        return taskService.getAllTasks();    
+        return taskService.getAll();    
     }
 
     $scope.isLoading = true;

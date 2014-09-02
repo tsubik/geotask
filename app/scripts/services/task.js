@@ -31,15 +31,18 @@ angular.module('donebytheway.services')
                 this.tasks.splice(this.tasks.indexOf(task), 1);
             },
             findById: function(taskId) {
-                if(this.createdTask && this.createdTask.id === taskId){
-                    return this.createdTask;
-                }
+                var self = this;
+                return self.initialized.then(function(){
+                    if(self.createdTask && self.createdTask.id === taskId){
+                        return self.createdTask;
+                    }
 
-                return this.tasks.firstOrDefault(function(task) {
-                    return task.id === taskId;
+                    return self.tasks.firstOrDefault(function(task) {
+                        return task.id === taskId;
+                    });
                 });
             },
-            findNearbyTasks: function() {
+            findNearby: function() {
                 var self = this;
                 var promise = new Promise(function(resolve, reject) {
                     self.initialized.then(function(){
@@ -69,14 +72,11 @@ angular.module('donebytheway.services')
                 });
                 return promise;
             },
-            getAllTasks: function(){
+            getAll: function(){
                 var self = this;
-                var promise = new Promise(function(resolve, reject) {
-                    self.initialized.then(function(){
-                        resolve(self.tasks);
-                    });
+                return self.initialized.then(function(){
+                    return self.tasks;
                 });
-                return promise;
             },
             saveChanges: function() {
                 storage.setItem('donebytheway-tasks', angular.toJson(this.tasks));

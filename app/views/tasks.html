@@ -1,5 +1,5 @@
 <ion-view title="{{title}}">
-    <ion-nav-bar type="bar-positive" animation="nav-title-slide-ios7">
+    <ion-nav-bar class="bar-positive" animation="nav-title-slide-ios7">
         <button class="button button-icon" menu-toggle="left">
             <i class="icon ion-navicon"></i>
         </button>
@@ -35,14 +35,14 @@
         </div>
     </ion-content>
 
-    <div ng-if="anyTaskSelected()" class="bar bar-header">
+    <div ng-if="anyTaskSelected()" class="bar bar-positive bar-header">
         <h1 class="title">{{ selectedTaskCount() }} Zaznaczone</h1>
         <button class="button button-clear" ng-click="cancelSelections()">
             Anuluj
         </button>
     </div>
 
-    <div ng-if="isSearching" class="bar bar-header item-input-inset">
+    <div ng-if="isSearching" class="bar bar-header bar-positive item-input-inset">
         <label class="item-input-wrapper">
             <i class="icon ion-search placeholder-icon"></i>
             <input type="search" ng-model="$parent.filter" placeholder="Search" focus="true">
@@ -52,7 +52,7 @@
         </button>
     </div>
 
-    <div class="tabs tabs-icon-left" ng-if="anyTaskSelected()">
+    <div class="tabs tabs-positive tabs-icon-left" ng-if="anyTaskSelected()">
         <a class="tab-item" ng-click="markSelectedTasksAsDone()">
             <i class="icon ion-checkmark"></i>
             Wykonane

@@ -1,23 +1,28 @@
 angular.module('donebytheway.controllers')
     .controller('TaskCtrl', function($scope, $stateParams, $log, $location, $state, $ionicModal, locationService, taskRepetitionService, repetitionFrequency, taskService) {
         var taskId = $stateParams.taskId;
-        task = taskService.findById(taskId);
-        if (!task) {
-            task = taskService.createNew();
-        }
+        var task;
 
-        $scope.task = task;
+        taskService.findById(taskId).then(function(t){
+            task = t;
+            if (!task) {
+                task = taskService.createNew();
+            }
+            $scope.$apply(function(){ 
+                $scope.task = task; 
+                $ionicModal.fromTemplateUrl('views/task-repetition-popup.html', {
+                    scope: $scope,
+                    animation: 'slide-in-up'
+                }).then(function(modal) {
+                    $scope.repetitionModal = modal;
+                });
 
-        $ionicModal.fromTemplateUrl('views/task-repetition-popup.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(modal) {
-            $scope.repetitionModal = modal;
+                $scope.$on('$destroy', function() {
+                    $scope.repetitionModal.remove();
+                });
+            });
         });
-
-        $scope.$on('$destroy', function() {
-            $scope.repetitionModal.remove();
-        });
+        
 
         $scope.saveTask = function() {
             taskService.addIfNotAdded(task);
