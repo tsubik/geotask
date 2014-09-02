@@ -1,5 +1,5 @@
 angular.module('donebytheway.services')
-.factory('locationService', function(){
+.factory('locationService', function(storage){
     var locationService = {
         locations: [],
         selectedLocationReminder: undefined,
@@ -18,15 +18,16 @@ angular.module('donebytheway.services')
             return this.locations.firstOrDefault(function(location){ return location.id === locationId; });
         },
         saveChanges: function(){
-            window.localStorage['donebytheway-locations'] = angular.toJson(this.locations);
+            storage.setItem('donebytheway-locations', angular.toJson(this.locations));
+        },
+        loadFromStorage: function(){
+            this.initialized = storage.getItem('donebytheway-locations').then(function(result){
+                locationService.locations = angular.fromJson(result);
+            });
+            return this.initialized;
         }
     };
-    var _locations = [];
-    try{
-        _locations = angular.fromJson(window.localStorage['donebytheway-locations']);
-    }catch(e){
-    };
-    locationService.locations = _locations || [];
+    locationService.loadFromStorage();
 
     return locationService;
 });

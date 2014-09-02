@@ -1,22 +1,44 @@
 angular.module('donebytheway.controllers')
 .controller('TasksCtrl', function($scope,$state,$log,$location,$ionicSideMenuDelegate, taskService){
-    var tasks = [];
-    var taskPromise;
-
+    $scope.tasks = [];
     if($state.is('app.nearby-tasks')){
-        taskPromise = taskService.findNearbyTasks();
         $scope.title = 'Zadania w pobliżu';
     } 
     else{
-        taskPromise = taskService.getAllTasks();
         $scope.title = 'Wszystkie zadania';
-    }
-    $scope.isSearching = true;
+    }    
 
-    taskPromise.then(function(result){
+    function getTasksByState(){
+        if($state.is('app.nearby-tasks')){
+            return taskService.findNearbyTasks();
+        } 
+        return taskService.getAllTasks();    
+    }
+
+    $scope.isLoading = true;
+
+    $scope.$watch('filter', function(newValue, oldValue){
+        if(newValue === oldValue){
+            return;
+        }
+        getTasksByState().then(function(_tasks){
+            $scope.$apply(function(){
+                if(newValue===''){
+                    $scope.tasks = _tasks;
+                }
+                else{
+                    $scope.tasks = _tasks.filter(function(t){
+                        return t.note.indexOf(newValue) >= 0;
+                    });  
+                }
+            });
+        });
+    });
+
+    getTasksByState().then(function(result){
         $scope.$apply(function(){
-            $scope.tasks = tasks = result;
-            $scope.isSearching = false;    
+            $scope.tasks = result;
+            $scope.isLoading = false;    
         });
     });
 
@@ -32,13 +54,13 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.cancelSelections = function(){
-        angular.forEach(tasks, function(task){
+        angular.forEach($scope.tasks, function(task){
             task.selected = false;
         });
     };
 
     $scope.markSelectedTasksAsDone = function(){
-        var selectedTasks = tasks.filter(selectedTask);
+        var selectedTasks = $scope.tasks.filter(selectedTask);
         angular.forEach(selectedTasks, function(task){
             taskService.markAsDone(task);
         });
@@ -46,7 +68,7 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.removeSelectedTasks = function(){;
-        var selectedTasks = tasks.filter(selectedTask);
+        var selectedTasks = $scope.tasks.filter(selectedTask);
         angular.forEach(selectedTasks, function(task){
             taskService.remove(task);
         });
@@ -67,22 +89,31 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.addLocationToTask = function(){
-        var task = tasks.filter(selectedTask)[0];
+        var task = $scope.tasks.filter(selectedTask)[0];
         $location.path('/task/'+task.id+'/select-location');
     };
 
     $scope.anyTaskSelected = function(){
-        return tasks.filter(selectedTask).length > 0;
+        return $scope.tasks.filter(selectedTask).length > 0;
     };
     $scope.onlyOneSelected = function(){
-        return tasks.filter(selectedTask).length === 1;
+        return $scope.tasks.filter(selectedTask).length === 1;
     };
     $scope.selectedTaskCount = function(){
-        return tasks.filter(selectedTask).length;
+        return $scope.tasks.filter(selectedTask).length;
     };
 
     $scope.editSelectedTask = function(){
-        var task = tasks.filter(selectedTask)[0];
+        var task = $scope.tasks.filter(selectedTask)[0];
         $location.path('/task/'+task.id);
+    };
+
+    $scope.isSearching = false;
+    $scope.search = function(){
+        $scope.isSearching = true;
+    };
+    $scope.cancelSearch = function(){
+        $scope.filter = '';
+        $scope.isSearching = false;
     };
 });

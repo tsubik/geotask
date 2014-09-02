@@ -1,5 +1,5 @@
 angular.module('donebytheway.services')
-    .factory('taskService', function(locationService, geolocation, taskRepetitionService, repetitionFrequency) {
+    .factory('taskService', function(locationService, geolocation, taskRepetitionService, repetitionFrequency, storage) {
         var taskService = {
             tasks: [],
             doneTasks: [],
@@ -42,27 +42,29 @@ angular.module('donebytheway.services')
             findNearbyTasks: function() {
                 var self = this;
                 var promise = new Promise(function(resolve, reject) {
-                    geolocation.getCurrentPosition(
-                        function(position) {
-                            var currentCoords = position.coords;
-                            var tasks = self.tasks.filter(function(task) {
-                                var isNearby = false;
-                                if (!task.locationReminders || task.locationReminders.length === 0) {
-                                    return false;
-                                }
-
-                                angular.forEach(task.locationReminders, function(reminder) {
-                                    if (geolocation.getDistance(currentCoords, reminder.location.coords) <= 5000) {
-                                        isNearby = true;
-                                        return;
+                    self.initialized.then(function(){
+                        geolocation.getCurrentPosition(
+                            function(position) {
+                                var currentCoords = position.coords;
+                                var tasks = self.tasks.filter(function(task) {
+                                    var isNearby = false;
+                                    if (!task.locationReminders || task.locationReminders.length === 0) {
+                                        return false;
                                     }
+
+                                    angular.forEach(task.locationReminders, function(reminder) {
+                                        if (geolocation.getDistance(currentCoords, reminder.location.coords) <= 5000) {
+                                            isNearby = true;
+                                            return;
+                                        }
+                                    });
+                                    return isNearby;
                                 });
-                                return isNearby;
+                                resolve(tasks);
+                            },
+                            function() {
+                                reject('error');
                             });
-                            resolve(tasks);
-                        },
-                        function() {
-                            reject('error');
                         });
                 });
                 return promise;
@@ -70,25 +72,33 @@ angular.module('donebytheway.services')
             getAllTasks: function(){
                 var self = this;
                 var promise = new Promise(function(resolve, reject) {
-                    resolve(self.tasks);
+                    self.initialized.then(function(){
+                        resolve(self.tasks);
+                    });
                 });
                 return promise;
             },
             saveChanges: function() {
-                window.localStorage['donebytheway-tasks'] = angular.toJson(this.tasks);
-                window.localStorage['donebytheway-done-tasks'] = angular.toJson(this.doneTasks);
+                storage.setItem('donebytheway-tasks', angular.toJson(this.tasks));
+                storage.setItem('donebytheway-done-tasks', angular.toJson(this.tasks));
             },
+            loadFromStorage: function(){
+                var tp = storage.getItem('donebytheway-tasks').then(function(result){
+                    var _tasks = angular.fromJson(result);
+                    angular.forEach(_tasks, function(task) {
+                        task.selected = false;
+                    });
+                    taskService.tasks = _tasks;
+                });
+                var tdp = storage.getItem('donebytheway-done-tasks').then(function(result){
+                    var _tasks = angular.fromJson(result);
+                    taskService.doneTasks = _tasks;
+                });
+                this.initialized = Promise.all([tp, tdp]);
+                return this.initialized;
+            }
         };
-        var _tasks = [];
-        try {
-            _tasks = angular.fromJson(window.localStorage['donebytheway-tasks']);
-            _doneTasks = angular.fromJson(window.localStorage['donebytheway-done-tasks']);
-            angular.forEach(_tasks, function(task) {
-                task.selected = false;
-            });
+        taskService.loadFromStorage();
 
-        } catch (e) {};
-        taskService.tasks = _tasks || [];
-        taskService.doneTasks = _doneTasks || [];
         return taskService;
     });
