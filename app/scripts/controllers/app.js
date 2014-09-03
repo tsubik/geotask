@@ -1,14 +1,14 @@
 angular.module('donebytheway.controllers')
-    .controller('AppCtrl', function($scope, $state, $log, $location, taskService, locationService, $ionicSideMenuDelegate, $ionicNavBarDelegate) {
+    .controller('AppCtrl', function($scope, $window, $state, $log, $location, taskService, locationService, $ionicSideMenuDelegate, $ionicNavBarDelegate) {
         $scope.toggleLeft = function() {
             $ionicSideMenuDelegate.toggleLeft();
         };
 
         $scope.reset = function(){
-        	window.localStorage.clear();
-        	taskService.tasks = [];
-        	locationService.locations = [];
-        	$state.go('app.tasks', { reload: true });
+        	// window.localStorage.clear();
+        	// taskService.tasks = [];
+        	// locationService.locations = [];
+            $window.location.reload();
         }
 
         $scope.getPreviousTitle = function() {

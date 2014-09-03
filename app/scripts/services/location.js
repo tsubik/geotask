@@ -27,7 +27,7 @@ angular.module('donebytheway.services')
             if(!this._locationsPromise){
                 this._locationsPromise = $q.defer();
                 storage.getItem('donebytheway-locations').then(function(result){
-                    if(result !== undefined){
+                    if(result){
                         self._locations = angular.fromJson(result);
                     }
                     self._locationsPromise.resolve(self._locations);

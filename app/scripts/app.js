@@ -83,3 +83,7 @@ angular.module('donebytheway', [
         $urlRouterProvider.otherwise('/app/tasks');
 
     });
+
+ionic.Platform.ready(function() {
+    angular.bootstrap(document, ['donebytheway']);
+});

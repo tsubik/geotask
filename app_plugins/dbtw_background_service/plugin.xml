@@ -19,11 +19,12 @@
     <platform name="android">
         <source-file src="src/android/BTWService.java" target-dir="src/com/tsubik/cordova/dbtw_background_service" />
         <source-file src="src/android/StartAppAtBootReceiver.java" target-dir="src/com/tsubik/cordova/dbtw_background_service" />
-        
+        <source-file src="src/android/TaskService.java" target-dir="src/com/tsubik/cordova/dbtw_background_service" />
+        <source-file src="src/android/libs/android-support-v4.jar" target-dir="libs" />
+
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <service android:name="com.tsubik.cordova.dbtw_background_service.BTWService" android:enabled="true" android:process=":remote" />
         </config-file>
-
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <receiver
@@ -37,6 +38,8 @@
 
         <config-file target="AndroidManifest.xml" parent="/manifest">
             <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
         </config-file>
 
      </platform>          

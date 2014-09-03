@@ -79,7 +79,7 @@ angular.module('donebytheway.services')
                     self._tasksPromise = $q.defer();
                     storage.getItem('donebytheway-tasks').then(function(result) {
                         var tasks = [];
-                        if(result !== undefined){
+                        if(result){
                             tasks = angular.fromJson(result)
                         }
                         angular.forEach(tasks, function(task) {
@@ -100,7 +100,7 @@ angular.module('donebytheway.services')
                     self._doneTasksPromise = $q.defer();
                     storage.getItem('donebytheway-done-tasks').then(function(result) {
                         var tasks = [];
-                        if(result !== undefined){
+                        if(result){
                             tasks = angular.fromJson(result)
                         }
                         self._doneTasks = tasks;

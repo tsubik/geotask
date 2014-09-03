@@ -1,5 +1,5 @@
 angular.module('donebytheway.services')
-.factory('storage', function(){
+.factory('storage', function($q){
     
     if(window.asyncLocalStorage){
         return window.asyncLocalStorage;
@@ -7,9 +7,9 @@ angular.module('donebytheway.services')
 
     var storage = {
         getItem: function(key){
-            return new Promise(function(resolve, reject){
-                resolve(window.localStorage[key]);
-            });
+            var def = $q.defer();
+            def.resolve(window.localStorage[key]);
+            return def.promise;
         },
         setItem: function(key, value){
             window.localStorage[key] = value;
