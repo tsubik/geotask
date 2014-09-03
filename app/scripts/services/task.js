@@ -1,8 +1,29 @@
 angular.module('donebytheway.services')
-    .factory('taskService', function(locationService, geolocation, taskRepetitionService, repetitionFrequency, storage) {
+    .factory('taskService', function(locationService, geolocation, taskRepetitionService, repetitionFrequency, storage, $q) {
+        function filterNearbyTasks(tasks, position, distance) {
+            var currentCoords = position.coords;
+            var _tasks = tasks.filter(function(task) {
+                var isNearby = false;
+                if (!task.locationReminders || task.locationReminders.length === 0) {
+                    return false;
+                }
+
+                angular.forEach(task.locationReminders, function(reminder) {
+                    if (geolocation.getDistance(currentCoords, reminder.location.coords) <= distance) {
+                        isNearby = true;
+                        return;
+                    }
+                });
+                return isNearby;
+            });
+            return _tasks;
+        };
+
         var taskService = {
-            tasks: [],
-            doneTasks: [],
+            _tasks: [],
+            _tasksPromise: null,
+            _doneTasks: [],
+            _doneTasksPromise: null,
             createdTask: undefined,
             createNew: function() {
                 return {
@@ -16,89 +37,82 @@ angular.module('donebytheway.services')
                     repetition: taskRepetitionService.createNew(repetitionFrequency.DAILY)
                 };
             },
-            markAsDone: function(task){
+            markAsDone: function(task) {
                 this.remove(task);
-                this.doneTasks.push(task);
+                this._doneTasks.push(task);
             },
-            addIfNotAdded: function(task){
-                if(!this.tasks.firstOrDefault(function(t) {
+            addIfNotAdded: function(task) {
+                if (!this._tasks.firstOrDefault(function(t) {
                     return t.id === task.id;
-                })){
-                    this.tasks.push(task);
+                })) {
+                    this._tasks.push(task);
                 }
             },
-            remove: function(task){
-                this.tasks.splice(this.tasks.indexOf(task), 1);
+            remove: function(task) {
+                this._tasks.splice(this.tasks.indexOf(task), 1);
             },
             findById: function(taskId) {
                 var self = this;
-                return self.initialized.then(function(){
-                    if(self.createdTask && self.createdTask.id === taskId){
+                return self.getAllTasks().then(function(tasks) {
+                    if (self.createdTask && self.createdTask.id === taskId) {
                         return self.createdTask;
                     }
 
-                    return self.tasks.firstOrDefault(function(task) {
+                    return tasks.firstOrDefault(function(task) {
                         return task.id === taskId;
                     });
                 });
             },
             findNearby: function() {
                 var self = this;
-                var promise = new Promise(function(resolve, reject) {
-                    self.initialized.then(function(){
-                        geolocation.getCurrentPosition(
-                            function(position) {
-                                var currentCoords = position.coords;
-                                var tasks = self.tasks.filter(function(task) {
-                                    var isNearby = false;
-                                    if (!task.locationReminders || task.locationReminders.length === 0) {
-                                        return false;
-                                    }
-
-                                    angular.forEach(task.locationReminders, function(reminder) {
-                                        if (geolocation.getDistance(currentCoords, reminder.location.coords) <= 5000) {
-                                            isNearby = true;
-                                            return;
-                                        }
-                                    });
-                                    return isNearby;
-                                });
-                                resolve(tasks);
-                            },
-                            function() {
-                                reject('error');
-                            });
-                        });
+                var def = $q.defer();
+                geolocation.getCurrentPosition(function(position) {
+                    self.getAllTasks()
+                        .then(function(tasks) { return filterNearbyTasks(tasks, position, 5000); })
+                        .then(function(tasks) { def.resolve(tasks); }, function() { def.reject('error') });
                 });
-                return promise;
+                return def.promise;
             },
-            getAll: function(){
+            getAllTasks: function() {
                 var self = this;
-                return self.initialized.then(function(){
-                    return self.tasks;
-                });
+                if (!self._tasksPromise) {
+                    self._tasksPromise = $q.defer();
+                    storage.getItem('donebytheway-tasks').then(function(result) {
+                        var tasks = [];
+                        if(result !== undefined){
+                            tasks = angular.fromJson(result)
+                        }
+                        angular.forEach(tasks, function(task) {
+                            task.selected = false;
+                        });
+                        self._tasks = tasks;
+                        self._tasksPromise.resolve(tasks);
+                    }, function(reason) {
+                        self._tasks = [];
+                        self._tasksPromise.resolve(self._tasks);
+                    });
+                }
+                return self._tasksPromise.promise;
+            },
+            getAllDoneTasks: function() {
+                var self = this;
+                if (!self._doneTasksPromise) {
+                    self._doneTasksPromise = $q.defer();
+                    storage.getItem('donebytheway-done-tasks').then(function(result) {
+                        var tasks = [];
+                        if(result !== undefined){
+                            tasks = angular.fromJson(result)
+                        }
+                        self._doneTasks = tasks;
+                        self._doneTasksPromise.resolve(tasks);
+                    });
+                }
+                return self._doneTasksPromise.promise;
             },
             saveChanges: function() {
-                storage.setItem('donebytheway-tasks', angular.toJson(this.tasks));
-                storage.setItem('donebytheway-done-tasks', angular.toJson(this.tasks));
-            },
-            loadFromStorage: function(){
-                var tp = storage.getItem('donebytheway-tasks').then(function(result){
-                    var _tasks = angular.fromJson(result);
-                    angular.forEach(_tasks, function(task) {
-                        task.selected = false;
-                    });
-                    taskService.tasks = _tasks;
-                });
-                var tdp = storage.getItem('donebytheway-done-tasks').then(function(result){
-                    var _tasks = angular.fromJson(result);
-                    taskService.doneTasks = _tasks;
-                });
-                this.initialized = Promise.all([tp, tdp]);
-                return this.initialized;
+                storage.setItem('donebytheway-tasks', angular.toJson(this._tasks));
+                storage.setItem('donebytheway-done-tasks', angular.toJson(this._doneTasks));
             }
         };
-        taskService.loadFromStorage();
-
         return taskService;
     });

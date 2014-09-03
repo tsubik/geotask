@@ -17,7 +17,6 @@
                 <h2>{{task.note}}</h2>
                 <p ng-if="task.locationReminders && task.locationReminders.length > 0">
                     <div ng-repeat="locationReminder in task.locationReminders">
-                        <i class="icon ion-location"></i>
                         <span ng-bind-html="locationReminder | locationReminder"></span>
                     </div>
                 </p>

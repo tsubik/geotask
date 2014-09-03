@@ -8,18 +8,16 @@ angular.module('donebytheway.controllers')
             if (!task) {
                 task = taskService.createNew();
             }
-            $scope.$apply(function(){ 
-                $scope.task = task; 
-                $ionicModal.fromTemplateUrl('views/task-repetition-popup.html', {
-                    scope: $scope,
-                    animation: 'slide-in-up'
-                }).then(function(modal) {
-                    $scope.repetitionModal = modal;
-                });
+            $scope.task = task; 
+            $ionicModal.fromTemplateUrl('views/task-repetition-popup.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                $scope.repetitionModal = modal;
+            });
 
-                $scope.$on('$destroy', function() {
-                    $scope.repetitionModal.remove();
-                });
+            $scope.$on('$destroy', function() {
+                $scope.repetitionModal.remove();
             });
         });
         

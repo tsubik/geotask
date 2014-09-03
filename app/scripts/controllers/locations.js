@@ -2,10 +2,8 @@ angular.module('donebytheway.controllers')
 .controller('LocationsCtrl', function($scope, $log, $location, geolocation, locationService, taskService){
 	$scope.locations = [];
     locationService.getAll().then(function(locs){
-        $scope.$apply(function(){
-            $scope.locations = locs;
-        });
-    })
+        $scope.locations = locs;
+    });
 
     var selectedLocation = function(item) { return item.selected; };
 

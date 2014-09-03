@@ -3,7 +3,6 @@ angular.module('donebytheway.controllers')
     var taskId = $stateParams.taskId;
     locationService.getAll().then(function(locations){
         $scope.locations = locations;
-        $scope.digest();    
     });
     $scope.location = '';
 

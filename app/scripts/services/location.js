@@ -1,7 +1,7 @@
 angular.module('donebytheway.services')
-.factory('locationService', function(storage){
+.factory('locationService', function(storage, $q){
     var locationService = {
-        locations: [],
+        _locations: [],
         selectedLocationReminder: undefined,
         createNew: function(options){
             options = options || { };
@@ -12,31 +12,30 @@ angular.module('donebytheway.services')
             };
         },
         remove: function(location){
-            this.locations.splice(this.locations.indexOf(location), 1);
+            this._locations.splice(this._locations.indexOf(location), 1);
         },
         findById: function(locationId){
-            var self = this;
-            return self.initialized.then(function(){
-                return self.locations.firstOrDefault(function(location){ return location.id === locationId; });
-            });
-        },
-        getAll: function(){
-            var self = this;
-            return self.initialized.then(function(){
-                return self.locations;
+            return self.getAll().then(function(locations){
+                return locations.firstOrDefault(function(location){ return location.id === locationId; });
             });
         },
         saveChanges: function(){
-            storage.setItem('donebytheway-locations', angular.toJson(this.locations));
+            storage.setItem('donebytheway-locations', angular.toJson(this._locations));
         },
-        loadFromStorage: function(){
-            this.initialized = storage.getItem('donebytheway-locations').then(function(result){
-                locationService.locations = angular.fromJson(result);
-            });
-            return this.initialized;
+        getAll: function(){
+            var self = this;
+            if(!this._locationsPromise){
+                this._locationsPromise = $q.defer();
+                storage.getItem('donebytheway-locations').then(function(result){
+                    if(result !== undefined){
+                        self._locations = angular.fromJson(result);
+                    }
+                    self._locationsPromise.resolve(self._locations);
+                });
+            }
+            return this._locationsPromise.promise;
         }
     };
-    locationService.loadFromStorage();
 
     return locationService;
 });

@@ -12,41 +12,32 @@ angular.module('donebytheway.controllers')
         if($state.is('app.nearby-tasks')){
             return taskService.findNearby();
         } 
-        return taskService.getAll();    
+        return taskService.getAllTasks();    
     }
 
     $scope.isLoading = true;
-
     $scope.$watch('filter', function(newValue, oldValue){
         if(newValue === oldValue){
             return;
         }
         getTasksByState().then(function(_tasks){
-            $scope.$apply(function(){
-                if(newValue===''){
-                    $scope.tasks = _tasks;
-                }
-                else{
-                    $scope.tasks = _tasks.filter(function(t){
-                        return t.note.indexOf(newValue) >= 0;
-                    });  
-                }
-            });
+            if(newValue===''){
+                $scope.tasks = _tasks;
+            }
+            else{
+                $scope.tasks = _tasks.filter(function(t){
+                    return t.note.match(new RegExp(newValue, "i"));
+                });  
+            }
         });
     });
 
     getTasksByState().then(function(result){
-        $scope.$apply(function(){
-            $scope.tasks = result;
-            $scope.isLoading = false;    
-        });
+        $scope.tasks = result;
+        $scope.isLoading = false;    
     });
 
     var selectedTask = function(item) { return item.selected; };
-
-    $scope.openMenuSettings = function(){
-
-    };
 
     $scope.addNewTask = function(){
         taskService.createdTask = taskService.createNew();
