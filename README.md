@@ -1,2 +1,2 @@
-Done by the way
+Ionic GeoTask app
 =====================
