@@ -49,7 +49,7 @@ angular.module('donebytheway.services')
                 }
             },
             remove: function(task) {
-                this._tasks.splice(this.tasks.indexOf(task), 1);
+                this._tasks.splice(this._tasks.indexOf(task), 1);
             },
             findById: function(taskId) {
                 var self = this;
