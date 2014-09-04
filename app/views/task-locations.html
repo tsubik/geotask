@@ -1,0 +1,19 @@
+<ion-view>
+	<ion-content>
+	    <div class="list">
+	        <a class="item item-icon-left item-icon-right" on-tap="changeLocationReminder(locationReminder)" ng-repeat="locationReminder in task.locationReminders">
+	        	<i class="icon ion-arrow-shrink"></i>
+	            <span ng-bind-html="locationReminder | locationReminder"></span>
+	            <i class="icon ion-trash-b" on-tap="removeLocation(locationReminder)"></i>
+	        </a>
+	        <div class="card" ng-if="task.locationReminders == 0">
+	            <div class="item item-text-wrap">
+	                Nie zdefinowano jeszcze żadnych lokalizacji dla zadania.
+	            </div>
+	        </div>
+	        <button class="button button-block button-positive" ng-click="addNewLocation()">
+	            Dodaj nową lokalizację
+	        </button> 
+	    </div>
+	</ion-content>
+</ion-view>

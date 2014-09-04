@@ -1,5 +1,5 @@
-<ion-view title="{{task.note}}">
-    <ion-nav-bar class="bar-positive">
+<ion-view>
+   <ion-nav-bar class="bar-positive">
         <ion-nav-buttons side="left">
             <a ui-sref="app.tasks" class="button icon-left ion-chevron-left button-clear">Zadania</a>
         </ion-nav-buttons>
@@ -7,56 +7,21 @@
             <button class="button button-icon icon ion-checkmark" ng-click="saveTask()"></button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content>
-        <form name="task_form" on-valid-submit="saveTask()" novalidate="novalidate">
-            <div class="list">
+    <ion-tabs class="tabs-positive tabs-icon-only">
+        <ion-tab title="Notatka" icon-on="ion-compose" icon-off="ion-compose" ui-sref="task">
+            <ion-content>
                 <label class="item item-input validated item-stacked-label">
                     <span class="input-label">Notatka</span>
-                    <input type="text" ng-model="task.note" name="note" required ng-maxlength=255>
-                    <i class="icon ion-alert-circled error"></i>
+                    <input type="text" ng-model="task.note" name="note">
                 </label>
-                <div class="item item-input item-stacked-label">
-                    <span class="input-label">Od Kiedy?</span>
-                    <div class="row">
-                        <div class="col">
-                            <input type="date" class="underlined" ng-model="task.dateFrom">
-                        </div>
-                        <div class="col">
-                            <input type="time" class="underlined" ng-model="task.timeFrom">
-                        </div>
-                    </div>
-                </div>
-                <div class="item item-input item-stacked-label">
-                    <span class="input-label">Do Kiedy?</span>
-                    <div class="row">
-                        <div class="col">
-                            <input type="date" class="underlined" ng-model="task.dateTo">
-                        </div>
-                        <div class="col">
-                            <input type="time" class="underlined" ng-mogel="task.timeTo">
-                        </div>
-                    </div>
-                </div>
-                <label class="item item-input item-stacked-label" ng-click="changeRepetition()">
-                    <span class="input-label">Powtarzanie</span>
-                    <div class="row">
-                        {{ task.repetition | repetition }}
-                    </div>
-                </label>
-                <div class="item item-input item-stacked-label">
-                    <span class="input-label">Gdzie?</span>
-                    <div class="list">
-                        <a class="item item-icon-right" ng-click="changeLocationReminder(locationReminder)" ng-repeat="locationReminder in task.locationReminders">
-                            <h2>{{locationReminder.location.name}}</h2>
-                            <p ng-bind-html="locationReminder | locationReminder: { onlyDistance: true }"></p>
-                            <i class="icon ion-trash-b" ng-click="removeLocation(locationReminder)"></i>
-                        </a>
-                        <button class="button button-block button-positive" ng-click="addNewLocation()">
-                            Dodaj nową lokalizację
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </ion-content>
+            </ion-content>
+        </ion-tab>
+        <ion-tab title="Lokalizacje" icon-on="ion-location" icon-off="ion-location" ui-sref="task.locations">
+            <ion-nav-view></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab title="Od kiedy do kiedy" icon-on="ion-calendar" icon-off="ion-calendar" ui-sref="task.calendar">
+            <ion-nav-view></ion-nav-view>
+        </ion-tab>
+    </ion-tabs>
 </ion-view>

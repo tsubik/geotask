@@ -70,6 +70,14 @@ angular.module('donebytheway', [
                 templateUrl: 'views/task.html',
                 controller: 'TaskCtrl'
             })
+            .state('task.locations', {
+                url: '/locations',
+                templateUrl: 'views/task-locations.html'
+            })
+            .state('task.calendar', {
+                url: '/calendar',
+                templateUrl: 'views/task-calendar.html'
+            })
             .state('task-select-location', {
                 url: '/task/:taskId/select-location',
                 templateUrl: 'views/task-select-location.html'

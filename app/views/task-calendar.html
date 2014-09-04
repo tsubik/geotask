@@ -1,0 +1,34 @@
+<ion-view>
+    <ion-content>
+        <div class="list">
+            <div class="item item-input item-stacked-label">
+                <span class="input-label">Od Kiedy?</span>
+                <div class="row">
+                    <div class="col">
+                        <input type="date" class="underlined" ng-model="task.dateFrom">
+                    </div>
+                    <div class="col">
+                        <input type="time" class="underlined" ng-model="task.timeFrom">
+                    </div>
+                </div>
+            </div>
+            <div class="item item-input item-stacked-label">
+                <span class="input-label">Do Kiedy?</span>
+                <div class="row">
+                    <div class="col">
+                        <input type="date" class="underlined" ng-model="task.dateTo">
+                    </div>
+                    <div class="col">
+                        <input type="time" class="underlined" ng-mogel="task.timeTo">
+                    </div>
+                </div>
+            </div>
+            <label class="item item-input item-stacked-label" ng-click="changeRepetition()">
+                <span class="input-label">Powtarzanie</span>
+                <div class="row">
+                    {{ task.repetition | repetition }}
+                </div>
+            </label>
+        </div>
+    </ion-content>
+</ion-view>

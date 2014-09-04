@@ -47,6 +47,6 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.goBackToTask = function(){
-        $location.path('task/'+taskId);
+        $location.path('task/'+taskId+"/locations");
     };
 });

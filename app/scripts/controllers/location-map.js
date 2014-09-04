@@ -86,7 +86,7 @@ angular.module('donebytheway.controllers')
                             saveReminderAndAddLocation(newLocation);
                             break;
                     }
-                    $location.path('/task/'+taskId);
+                    $location.path('/task/'+taskId+'/locations');
                     return true;
                 }
             })
