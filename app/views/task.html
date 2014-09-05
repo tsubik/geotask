@@ -9,17 +9,11 @@
     </ion-nav-bar>
     <ion-tabs class="tabs-positive tabs-icon-only">
         <ion-tab title="Notatka" icon-on="ion-compose" icon-off="ion-compose" ui-sref="task">
-            <ion-content>
-                <label class="item item-input validated item-stacked-label">
-                    <span class="input-label">Notatka</span>
-                    <input type="text" ng-model="task.note" name="note">
-                </label>
-            </ion-content>
+            <ion-nav-view></ion-nav-view>
         </ion-tab>
         <ion-tab title="Lokalizacje" icon-on="ion-location" icon-off="ion-location" ui-sref="task.locations">
             <ion-nav-view></ion-nav-view>
         </ion-tab>
-
         <ion-tab title="Od kiedy do kiedy" icon-on="ion-calendar" icon-off="ion-calendar" ui-sref="task.calendar">
             <ion-nav-view></ion-nav-view>
         </ion-tab>

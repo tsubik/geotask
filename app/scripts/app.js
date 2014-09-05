@@ -68,8 +68,13 @@ angular.module('donebytheway', [
             })
             .state('task', {
                 url: '/task/:taskId',
+                abstract: true,
                 templateUrl: 'views/task.html',
                 controller: 'TaskCtrl'
+            })
+            .state('task.note', {
+                url: '',
+                templateUrl: 'views/task-note.html'
             })
             .state('task.locations', {
                 url: '/locations',
