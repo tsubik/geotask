@@ -20,14 +20,6 @@ angular.module('donebytheway.controllers')
                 $scope.repetitionModal.remove();
             });
         });
-        
-
-        $scope.saveTask = function() {
-            taskService.addIfNotAdded(task);
-            taskService.saveChanges();
-            taskService.createdTask = undefined;
-            $state.go('app.tasks');
-        };
 
         $scope.addNewLocation = function() {
             taskService.saveChanges();

@@ -70,7 +70,14 @@ angular.module('donebytheway', [
                 url: '/task/:taskId',
                 abstract: true,
                 templateUrl: 'views/task.html',
-                controller: 'TaskCtrl'
+                controller: 'TaskCtrl',
+                onExit: function(taskService){
+                    if(taskService.createdTask && taskService.createdTask.note){
+                        taskService.addIfNotAdded(taskService.createdTask);
+                        taskService.saveChanges();    
+                        taskService.createdTask = undefined;
+                    }
+                }
             })
             .state('task.note', {
                 url: '',
