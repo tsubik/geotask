@@ -8,9 +8,6 @@
             <button class="button pull-right button-icon icon ion-plus" ng-click="addNewTask()"></button>
         </div>
     </ion-nav-bar>
-    <!--   <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons> -->
     <ion-content>
         <ion-list can-swipe="true">
             <ion-item ng-class="{selected: task.selected}" on-hold="selectTask(task)" on-tap="editTask(task)" class="item" ng-repeat="task in tasks">

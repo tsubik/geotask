@@ -11,11 +11,14 @@ angular.module('donebytheway.services')
                 coords: options.coords
             };
         },
+        add: function(location){
+            this._locations.push(location);
+        },
         remove: function(location){
             this._locations.splice(this._locations.indexOf(location), 1);
         },
         findById: function(locationId){
-            return self.getAll().then(function(locations){
+            return this.getAll().then(function(locations){
                 return locations.firstOrDefault(function(location){ return location.id === locationId; });
             });
         },
@@ -36,6 +39,7 @@ angular.module('donebytheway.services')
             return this._locationsPromise.promise;
         }
     };
+    locationService.getAll();
 
     return locationService;
 });

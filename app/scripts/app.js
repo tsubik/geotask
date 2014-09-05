@@ -16,7 +16,8 @@ angular.module('donebytheway', [
     'donebytheway.services',
     'donebytheway.filters'
 ])
-    .config(function($stateProvider, $urlRouterProvider) {
+    .config(function($stateProvider, $urlRouterProvider,$ionicNavBarConfig, $ionicTabsConfig) {
+        $ionicTabsConfig.type = '';
         $stateProvider
             .state('app', {
                 url: "/app",
@@ -82,9 +83,9 @@ angular.module('donebytheway', [
                 url: '/task/:taskId/select-location',
                 templateUrl: 'views/task-select-location.html'
             })
-            .state('task-location-map', {
+            .state('task-select-location-map', {
                 url: '/task/:taskId/location-map',
-                templateUrl: 'views/map.html',
+                templateUrl: 'views/task-select-location-map.html',
                 controller: 'LocationMapCtrl'
             })
         // if none of the above states are matched, use this as the fallback

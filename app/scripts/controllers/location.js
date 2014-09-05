@@ -1,5 +1,5 @@
 angular.module('donebytheway.controllers')
-    .controller('LocationCtrl', function($scope, $location, $log, $timeout, $ionicNavBarDelegate, $stateParams, locationService, leafletEvents) {
+    .controller('LocationCtrl', function($scope, $state, $location, $log, $timeout, $ionicNavBarDelegate, $stateParams, locationService, leafletEvents) {
         var locationId = $stateParams.locationId;
         $scope.map = {
             center: {
@@ -18,33 +18,32 @@ angular.module('donebytheway.controllers')
             }
         };
 
-        locationService.findById(locationId).then(function(location) {
-            if (!location) {
-                $location.path('/');
-            }
-            $scope.location = location;
+        // locationService.findById(locationId).then(function(location) {
+        //     if (!location) {
+        //         $location.path('/');
+        //     }
+        //     $scope.location = location;
 
-            var marker = {
-                lat: location.coords.latitude,
-                lng: location.coords.longitude,
-                draggable: false,
-                message: location.name,
-                icon: {}
-            };
+        //     var marker = {
+        //         lat: location.coords.latitude,
+        //         lng: location.coords.longitude,
+        //         draggable: false,
+        //         message: location.name,
+        //         icon: {}
+        //     };
 
-            $scope.map = {
-                center: {
-                    lat: marker.lat,
-                    lng: marker.lng,
-                    zoom: 12
-                }
-            };
+        //     $scope.map = {
+        //         center: {
+        //             lat: marker.lat,
+        //             lng: marker.lng,
+        //             zoom: 12
+        //         }
+        //     };
 
-            $scope.markers = {
-                marker: marker
-            };
-            $scope.$digest();
-        });
+        //     $scope.markers = {
+        //         marker: marker
+        //     };
+        // });
 
         $scope.edit = function() {
             var newLocationName = prompt('Nazwa lokalizacji', $scope.location.name);

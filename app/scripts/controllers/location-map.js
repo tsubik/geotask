@@ -1,10 +1,13 @@
 angular.module('donebytheway.controllers')
     .controller('LocationMapCtrl', function($scope,$ionicActionSheet, $location, $log, $timeout, $ionicNavBarDelegate, $stateParams, taskService, locationService, leafletEvents) {
+        
         var taskId = $stateParams.taskId;
         var marker = {
             draggable: true,
             message: "Lokalizacja zadania",
-            icon: {}
+            icon: {},
+            lat: 50,
+            lng: 50
         };
         var locationReminder = locationService.selectedLocationReminder;
 
@@ -28,14 +31,12 @@ angular.module('donebytheway.controllers')
         $scope.paths = {
             circle: {
                 type: "circle",
-                radius: locationReminder.radius,
+                radius: 1000,
                 latlngs: marker,
                 clickable: true
             }
         };
-        $scope.markers = {
-            marker: marker
-        };
+
 
         function saveReminder(newLocation){
             taskService.findById(taskId).then(function(task){
@@ -52,7 +53,7 @@ angular.module('donebytheway.controllers')
 
         function saveReminderAndAddLocation(newLocation){
             saveReminder(newLocation);
-            locationService.locations.push(newLocation);
+            locationService.add(newLocation);
             locationService.saveChanges();
         };
 
