@@ -29,10 +29,10 @@ angular.module('geolocation', ['ngResource'])
     };
 
     Geolocation.getDistance = function(p1, p2) {
-        var lat1 = p1.latitude,
-            lon1 = p1.longitude
-        var lat2 = p2.latitude,
-            lon2 = p2.longitude
+        var lat1 = p1.latitude || p1.lat,
+            lon1 = p1.longitude || p1.lng
+        var lat2 = p2.latitude || p2.lat,
+            lon2 = p2.longitude || p2.lng
 
         var R = 6371; // km
         var dLat = (lat2 - lat1) * Math.PI / 180;

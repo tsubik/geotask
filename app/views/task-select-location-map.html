@@ -15,9 +15,9 @@
         </div>
         <div class="range">
           na
-          <input type="range" name="volume" min="0" max="20000" ng-model="paths.circle.radius">
+          <input type="range" name="volume" min="0" max="{{maxRadiusRange}}" ng-model="paths.circle.radius">
           {{ paths.circle.radius }}m 
         </div>
-        <leaflet  markers="markers" paths="paths" center="center" height="480px"></leaflet>
+        <leaflet markers="markers" paths="paths" center="center" event-broadcast="events" height="480px"></leaflet>
     </ion-content>
 </ion-view>

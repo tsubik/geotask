@@ -1,5 +1,5 @@
 angular.module('donebytheway.controllers')
-    .controller('LocationMapCtrl', function($scope,$ionicActionSheet, $location, $log, $timeout, $ionicNavBarDelegate, $stateParams, taskService, locationService, leafletEvents) {
+    .controller('LocationMapCtrl', function($scope,$ionicActionSheet, $location, $log, $timeout, $ionicNavBarDelegate, $stateParams, taskService, locationService, leafletEvents, leafletData, geolocation) {
         
         var taskId = $stateParams.taskId;
         var marker = {
@@ -13,17 +13,35 @@ angular.module('donebytheway.controllers')
             $location.path('/');
             return;
         }
+        $scope.maxRadiusRange = 5000;
 
         marker.lat = locationReminder.location.coords.latitude;
         marker.lng = locationReminder.location.coords.longitude;
         $scope.locationName = locationReminder.location.name;
         $scope.whenIgetCloser = locationReminder.whenIgetCloser;
         
+        $scope.events = {
+            map: {
+                enable: ['zoomend'],
+                logic: 'emit'
+            }
+        };
         $scope.center = {
             lat: marker.lat,
-                lng: marker.lng,
-                zoom: 12
-            };
+            lng: marker.lng,
+            zoom: 12
+        };
+
+        $scope.$on('leafletDirectiveMap.zoomend', function(e) {
+            leafletData.getMap().then(function(map) {
+                var bounds = map.getBounds();
+                var boundsDistanceRadius = geolocation.getDistance(bounds.getNorthWest(), bounds.getSouthEast()) * 1000 / 2;
+                if(boundsDistanceRadius > $scope.paths.circle.radius){
+                    $scope.maxRadiusRange = boundsDistanceRadius;    
+                }
+            });
+        });
+
 
         $scope.paths = {
             circle: {
@@ -36,6 +54,7 @@ angular.module('donebytheway.controllers')
         $scope.markers = {
             marker: marker
         };
+
 
         function saveReminder(newLocation){
             taskService.findById(taskId).then(function(task){
