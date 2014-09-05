@@ -1,5 +1,5 @@
 angular.module('donebytheway.controllers')
-    .controller('TaskCtrl', function($scope, $stateParams, $log, $location, $state, $ionicModal, locationService, taskRepetitionService, repetitionFrequency, taskService) {
+    .controller('TaskCtrl', function($scope,$ionicActionSheet, $stateParams, $log, $location, $state, $ionicModal, locationService, taskRepetitionService, repetitionFrequency, taskService) {
         var taskId = $stateParams.taskId;
         var task;
         $scope.taskId = taskId;
@@ -38,5 +38,29 @@ angular.module('donebytheway.controllers')
 
         $scope.changeRepetition = function() {
             $scope.repetitionModal.show();
+        };
+
+        $scope.more = function(){
+            var actionSheet = $ionicActionSheet.show({
+                buttons: [
+                    { text: 'Odchacz jako wykonane' }
+                ],
+                destructiveText: 'Usuń',
+                cancelText: 'Anuluj',
+                buttonClicked: function(index){
+                    switch(index){
+                        case 0:  
+                            taskService.markAsDone(task);
+                            taskService.saveChanges();
+                            break;
+                    }
+                    return true;
+                },
+                destructiveButtonClicked: function(){
+                    taskService.remove(task);
+                    taskService.saveChanges();
+                    $state.go('app.tasks');
+                }
+            });
         }
     });
