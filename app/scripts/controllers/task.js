@@ -2,7 +2,7 @@ angular.module('donebytheway.controllers')
     .controller('TaskCtrl', function($scope, $stateParams, $log, $location, $state, $ionicModal, locationService, taskRepetitionService, repetitionFrequency, taskService) {
         var taskId = $stateParams.taskId;
         var task;
-
+        $scope.taskId = taskId;
         taskService.findById(taskId).then(function(t){
             task = t;
             if (!task) {

@@ -74,15 +74,27 @@ angular.module('donebytheway', [
             })
             .state('task.note', {
                 url: '',
-                templateUrl: 'views/task-note.html'
+                views: {
+                    "note-tab": {
+                        templateUrl: 'views/task-note.html'
+                    }
+                }
             })
             .state('task.locations', {
                 url: '/locations',
-                templateUrl: 'views/task-locations.html'
+                views: {
+                    'locations-tab': {
+                        templateUrl: 'views/task-locations.html'
+                    }
+                }
             })
             .state('task.calendar', {
                 url: '/calendar',
-                templateUrl: 'views/task-calendar.html'
+                views: {
+                    'calendar-tab': {
+                        templateUrl: 'views/task-calendar.html'
+                    }
+                }
             })
             .state('task-select-location', {
                 url: '/task/:taskId/select-location',
