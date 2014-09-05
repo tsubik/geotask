@@ -5,9 +5,7 @@ angular.module('donebytheway.controllers')
         var marker = {
             draggable: true,
             message: "Lokalizacja zadania",
-            icon: {},
-            lat: 50,
-            lng: 50
+            icon: {}
         };
         var locationReminder = locationService.selectedLocationReminder;
 
@@ -21,22 +19,23 @@ angular.module('donebytheway.controllers')
         $scope.locationName = locationReminder.location.name;
         $scope.whenIgetCloser = locationReminder.whenIgetCloser;
         
-        $scope.map = {
-            center: {
-                lat: marker.lat,
+        $scope.center = {
+            lat: marker.lat,
                 lng: marker.lng,
                 zoom: 12
-            }
-        };
+            };
+
         $scope.paths = {
             circle: {
                 type: "circle",
-                radius: 1000,
+                radius: locationReminder.radius,
                 latlngs: marker,
-                clickable: true
+                clickable: false
             }
         };
-
+        $scope.markers = {
+            marker: marker
+        };
 
         function saveReminder(newLocation){
             taskService.findById(taskId).then(function(task){
