@@ -19,13 +19,14 @@ angular.module('donebytheway', [
     .config(function($stateProvider, $urlRouterProvider,$ionicNavBarConfig, $ionicTabsConfig) {
         $ionicTabsConfig.type = '';
         $stateProvider
-            .state('app', {
-                url: "/app",
+            //Main menu
+            .state('main-menu', {
+                url: "",
                 abstract: true,
-                templateUrl: "views/menu.html",
-                controller: 'AppCtrl'
+                templateUrl: "views/main-menu.html",
+                controller: 'MainMenuCtrl'
             })
-            .state('app.locations', {
+            .state('main-menu.locations', {
                 url: '/locations',
                 views: {
                     'menuContent': {
@@ -34,12 +35,7 @@ angular.module('donebytheway', [
                     }
                 }
             })
-            .state('location', {
-                url: '/location/:locationId',
-                templateUrl: 'views/location.html',
-                controller: 'LocationCtrl'
-            })
-            .state('app.tasks', {
+            .state('main-menu.tasks', {
                 url: '/tasks',
                 views: {
                     'menuContent': {
@@ -48,7 +44,7 @@ angular.module('donebytheway', [
                     }
                 }
             })
-            .state('app.nearby-tasks', {
+            .state('main-menu.nearby-tasks', {
                 url: '/nearby-tasks',
                 views: {
                     'menuContent': {
@@ -57,20 +53,27 @@ angular.module('donebytheway', [
                     }
                 }
             })
-            .state('app.done-tasks', {
+            .state('main-menu.done-tasks', {
                 url: '/done-tasks',
                 views: {
                     'menuContent': {
-                        templateUrl: 'views/done-tasks.html',
+                        templateUrl: 'views/tasks-done.html',
                         controller: 'DoneTasksCtrl'
                     }
                 }
             })
+
+            //Task edition
             .state('task', {
                 url: '/task/:taskId',
                 abstract: true,
                 templateUrl: 'views/task.html',
                 controller: 'TaskCtrl',
+                resolve: {
+                    task: function(taskService, $stateParams){
+                        return taskService.findById($stateParams.taskId);
+                    }
+                },
                 onExit: function(taskService){
                     if(taskService.createdTask && taskService.createdTask.note){
                         taskService.addIfNotAdded(taskService.createdTask);
@@ -79,7 +82,7 @@ angular.module('donebytheway', [
                     }
                 }
             })
-            .state('task.note', {
+            .state('task.default', {
                 url: '',
                 views: {
                     "note-tab": {
@@ -105,15 +108,40 @@ angular.module('donebytheway', [
             })
             .state('task-select-location', {
                 url: '/task/:taskId/select-location',
-                templateUrl: 'views/task-select-location.html'
+                templateUrl: 'views/task-select-location.html',
+                controller: 'TaskSelectLocationCtrl'
             })
             .state('task-select-location-map', {
-                url: '/task/:taskId/location-map',
+                url: '/task/:taskId/select-location-map',
                 templateUrl: 'views/task-select-location-map.html',
-                controller: 'LocationMapCtrl'
+                controller: 'TaskSelectLocationMapCtrl',
+                resolve: {
+                    locationReminder: function(locationService, $location){
+                        if(!locationService.selectedLocationReminder){
+                            $location.path('/');
+                        }
+                        return locationService.selectedLocationReminder;
+                    }
+                }
             })
+
+            //Location edition
+            .state('location', {
+                url: '/location/:locationId',
+                templateUrl: 'views/location.html',
+                controller: 'LocationCtrl',
+                resolve: {
+                    location: function(locationService, $stateParams){
+                        return locationService.findById($stateParams.locationId);
+                    }
+                },
+                onExit: function(locationService){
+                    locationService.saveChanges();
+                }
+            })
+            
         // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/app/tasks');
+        $urlRouterProvider.otherwise('/tasks');
 
     });
 

@@ -1,23 +1,5 @@
 angular.module('donebytheway.services')
-    .factory('taskService', function(locationService, geolocation, taskRepetitionService, repetitionFrequency, storage, $q) {
-        function filterNearbyTasks(tasks, position, distance) {
-            var currentCoords = position.coords;
-            var _tasks = tasks.filter(function(task) {
-                var isNearby = false;
-                if (!task.locationReminders || task.locationReminders.length === 0) {
-                    return false;
-                }
-
-                angular.forEach(task.locationReminders, function(reminder) {
-                    if (geolocation.getDistance(currentCoords, reminder.location.coords) <= distance) {
-                        isNearby = true;
-                        return;
-                    }
-                });
-                return isNearby;
-            });
-            return _tasks;
-        };
+    .factory('taskService', function($log,locationService, geolocation, taskRepetitionService, repetitionFrequency, storage, $q) {
 
         var taskService = {
             _tasks: [],
@@ -78,6 +60,7 @@ angular.module('donebytheway.services')
                 if (!self._tasksPromise) {
                     self._tasksPromise = $q.defer();
                     storage.getItem('donebytheway-tasks').then(function(result) {
+                        $log.log('getAllTasks() loading from localstorage');
                         var tasks = [];
                         if(result){
                             tasks = angular.fromJson(result)
@@ -115,4 +98,23 @@ angular.module('donebytheway.services')
             }
         };
         return taskService;
+
+        function filterNearbyTasks(tasks, position, distance) {
+            var currentCoords = position.coords;
+            var _tasks = tasks.filter(function(task) {
+                var isNearby = false;
+                if (!task.locationReminders || task.locationReminders.length === 0) {
+                    return false;
+                }
+
+                angular.forEach(task.locationReminders, function(reminder) {
+                    if (geolocation.getDistance(currentCoords, reminder.location.coords) <= distance) {
+                        isNearby = true;
+                        return;
+                    }
+                });
+                return isNearby;
+            });
+            return _tasks;
+        };
     });

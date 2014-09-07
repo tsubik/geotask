@@ -1,20 +1,20 @@
 <ion-view>
    <ion-nav-bar class="bar-positive">
         <ion-nav-buttons side="left">
-            <a ui-sref="app.tasks" class="button icon-left ion-chevron-left button-clear">Zadania</a>
+            <a ui-sref="main-menu.tasks" class="button icon-left ion-chevron-left button-clear">Zadania</a>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
             <button class="button button-icon icon ion-android-more" ng-click="more()"></button>
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-tabs class="tabs-positive tabs-icon-top">
-        <ion-tab title="Notatka" icon="ion-compose" href="#/task/{{taskId}}">
+        <ion-tab title="Notatka" icon="ion-compose" ui-sref="task.default">
             <ion-nav-view name="note-tab"></ion-nav-view>
         </ion-tab>
-        <ion-tab title="Lokalizacje" icon="ion-location" href="#/task/{{taskId}}/locations">
+        <ion-tab title="Lokalizacje" icon="ion-location" ui-sref="task.locations">
             <ion-nav-view name="locations-tab"></ion-nav-view>
         </ion-tab>
-        <ion-tab title="Od kiedy do kiedy" icon="ion-calendar" href="#/task/{{taskId}}/calendar">
+        <ion-tab title="Od kiedy do kiedy" icon="ion-calendar" ui-sref="task.calendar">
             <ion-nav-view name="calendar-tab"></ion-nav-view>
         </ion-tab>
     </ion-tabs>

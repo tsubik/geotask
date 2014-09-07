@@ -1,19 +1,17 @@
 angular.module('donebytheway.controllers')
-.controller('LocationsCtrl', function($scope, $log, $location, geolocation, locationService, taskService){
+.controller('LocationsCtrl', function($scope, $log, $state, locationService){
 	$scope.locations = [];
-    locationService.getAll().then(function(locs){
-        $scope.locations = locs;
+    locationService.getAll().then(function(locations){
+        $scope.locations = locations;
     });
-
-    var selectedLocation = function(item) { return item.selected; };
 
     $scope.locationOnClick = function(location){
         if($scope.anyLocationsSelected()){
         	$scope.locationOnHold(location);
         }
         else{
-        	$location.path('/location/'+location.id);
-    	}
+            $state.go('location', { locationId: location.id });
+        }
     };
 
     $scope.locationOnHold = function(location){
@@ -26,12 +24,12 @@ angular.module('donebytheway.controllers')
         });
     };
     $scope.showSelected = function(){
-    	var location = $scope.locations.filter(selectedLocation)[0];
-    	$location.path('/location/'+location.id)
+    	var location = $scope.locations.filter(selectedLocationFilter)[0];
+    	$state.go('location', { locationId: location.id });
     }
 
     $scope.removeSelectedLocations = function(){
-        var selectedLocations = $scope.locations.filter(selectedLocation);
+        var selectedLocations = $scope.locations.filter(selectedLocationFilter);
         angular.forEach(selectedLocations, function(location){
             locationService.remove(location);
         });
@@ -39,12 +37,14 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.anyLocationsSelected = function(){
-        return $scope.locations.filter(selectedLocation).length > 0;
+        return $scope.locations.filter(selectedLocationFilter).length > 0;
     };
     $scope.onlyOneSelected = function(){
-        return $scope.locations.filter(selectedLocation).length === 1;
+        return $scope.locations.filter(selectedLocationFilter).length === 1;
     };
     $scope.selectedLocationsCount = function(){
-        return $scope.locations.filter(selectedLocation).length;
+        return $scope.locations.filter(selectedLocationFilter).length;
     };
+
+    function selectedLocationFilter(item) { return item.selected; };
 });

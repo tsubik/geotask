@@ -1,7 +1,7 @@
 angular.module('donebytheway.controllers')
-.controller('TasksCtrl', function($scope,$state,$log,$location,$ionicSideMenuDelegate, taskService){
+.controller('TasksCtrl', function($scope,$state,$log, taskService){
     $scope.tasks = [];
-    if($state.is('app.nearby-tasks')){
+    if($state.is('main-menu.nearby-tasks')){
         $scope.title = 'Zadania w pobliżu';
     } 
     else{
@@ -9,39 +9,22 @@ angular.module('donebytheway.controllers')
     }    
 
     function getTasksByState(){
-        if($state.is('app.nearby-tasks')){
+        if($state.is('main-menu.nearby-tasks')){
             return taskService.findNearby();
         } 
         return taskService.getAllTasks();    
     }
 
     $scope.isLoading = true;
-    $scope.$watch('filter', function(newValue, oldValue){
-        if(newValue === oldValue){
-            return;
-        }
-        getTasksByState().then(function(_tasks){
-            if(newValue===''){
-                $scope.tasks = _tasks;
-            }
-            else{
-                $scope.tasks = _tasks.filter(function(t){
-                    return t.note.match(new RegExp(newValue, "i"));
-                });  
-            }
-        });
-    });
 
-    getTasksByState().then(function(result){
-        $scope.tasks = result;
+    getTasksByState().then(function(tasks){
+        $scope.tasks = tasks;
         $scope.isLoading = false;    
     });
 
-    var selectedTask = function(item) { return item.selected; };
-
     $scope.addNewTask = function(){
         taskService.createdTask = taskService.createNew();
-        $location.path('/task/'+taskService.createdTask.id);
+        $state.go('task.default', { taskId: taskService.createdTask.id });
     };
 
     $scope.cancelSelections = function(){
@@ -51,7 +34,7 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.markSelectedTasksAsDone = function(){
-        var selectedTasks = $scope.tasks.filter(selectedTask);
+        var selectedTasks = $scope.tasks.filter(selectedTaskFilter);
         angular.forEach(selectedTasks, function(task){
             taskService.markAsDone(task);
         });
@@ -59,7 +42,7 @@ angular.module('donebytheway.controllers')
     };
 
     $scope.removeSelectedTasks = function(){;
-        var selectedTasks = $scope.tasks.filter(selectedTask);
+        var selectedTasks = $scope.tasks.filter(selectedTaskFilter);
         angular.forEach(selectedTasks, function(task){
             taskService.remove(task);
         });
@@ -71,7 +54,7 @@ angular.module('donebytheway.controllers')
             $scope.selectTask(task);
         }
         else{
-            $location.path('/task/'+task.id);
+            $state.go('task.default', { taskId: task.id });
         }
     };
 
@@ -79,24 +62,19 @@ angular.module('donebytheway.controllers')
         task.selected = !task.selected;
     };
 
-    $scope.addLocationToTask = function(){
-        var task = $scope.tasks.filter(selectedTask)[0];
-        $location.path('/task/'+task.id+'/select-location');
-    };
-
     $scope.anyTaskSelected = function(){
-        return $scope.tasks.filter(selectedTask).length > 0;
+        return $scope.tasks.filter(selectedTaskFilter).length > 0;
     };
     $scope.onlyOneSelected = function(){
-        return $scope.tasks.filter(selectedTask).length === 1;
+        return $scope.tasks.filter(selectedTaskFilter).length === 1;
     };
     $scope.selectedTaskCount = function(){
-        return $scope.tasks.filter(selectedTask).length;
+        return $scope.tasks.filter(selectedTaskFilter).length;
     };
 
     $scope.editSelectedTask = function(){
-        var task = $scope.tasks.filter(selectedTask)[0];
-        $location.path('/task/'+task.id);
+        var task = $scope.tasks.filter(selectedTaskFilter)[0];
+        $state.go('task.default', { taskId: task.id });
     };
 
     $scope.isSearching = false;
@@ -107,4 +85,6 @@ angular.module('donebytheway.controllers')
         $scope.filter = '';
         $scope.isSearching = false;
     };
+
+    function selectedTaskFilter(item) { return item.selected; }
 });

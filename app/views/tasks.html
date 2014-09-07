@@ -10,7 +10,7 @@
     </ion-nav-bar>
     <ion-content>
         <ion-list can-swipe="true">
-            <ion-item ng-class="{selected: task.selected}" on-hold="selectTask(task)" on-tap="editTask(task)" class="item" ng-repeat="task in tasks">
+            <ion-item ng-class="{selected: task.selected}" on-hold="selectTask(task)" on-tap="editTask(task)" class="item" ng-repeat="task in tasks | filter:filter">
                 <h2>{{task.note}}</h2>
                 <p ng-if="task.locationReminders && task.locationReminders.length > 0">
                     <div ng-repeat="locationReminder in task.locationReminders">

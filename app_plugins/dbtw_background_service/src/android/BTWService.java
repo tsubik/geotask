@@ -75,6 +75,7 @@ public class BTWService extends Service implements
     // Holds the location client
     private LocationClient mLocationClient;
     private LocationRequest mLocationRequest;
+    private TaskNotifier taskNotifier;
     
     // Stores the PendingIntent used to request geofence monitoring
     private PendingIntent mGeofenceRequestIntent;
@@ -106,11 +107,19 @@ public class BTWService extends Service implements
 		_Context = this.getApplicationContext();
 		Log.d(TAG, "Service created");
 		taskService = new TaskService(this.getApplicationContext());
-		notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
 		tasks = taskService.GetTasks();
 		geoFences = new ArrayList<Geofence>();
 		setGeoFences(tasks);
-		
+//		
+//		taskNotifier = new TaskNotifier((NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE), this);
+//		if(tasks.length() > 0){
+//			try {
+//				taskNotifier.notify(tasks.getJSONObject(0), true);
+//			} catch (JSONException e) {
+//				Log.d(TAG, "Error while getting task");
+//				e.printStackTrace();
+//			}
+//		}
 		mInProgress = false;
         // Create the LocationRequest object
         mLocationRequest = LocationRequest.create();
@@ -319,20 +328,6 @@ public class BTWService extends Service implements
 //			}
 //		}
 //	}
-	
-	private void notify(String text){
-		Log.d(TAG, "notification");
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-		    .setSmallIcon(R.drawable.ic_notification_overlay)
-		    .setContentTitle("Done by the way task")
-		    .setContentText("Helloł motherfucker");
-		NotificationCompat.InboxStyle inboxStyle =
-		        new NotificationCompat.InboxStyle();
-		
-		mBuilder.setStyle(inboxStyle);
-		
-		notificationManager.notify(100, mBuilder.build());
-	}
 
 	
 

@@ -2,22 +2,32 @@ package com.tsubik.cordova.dbtw_background_service;
 
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 
+import android.R;
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.app.NotificationManager;
 
 
 public class ReceiveTransitionsIntentService extends IntentService {
 	protected BeepHelper beepHelper;
+	protected TaskNotifier taskNotifier;
+	
     /**
      * Sets an identifier for the service
      */
     public ReceiveTransitionsIntentService() {
         super("ReceiveTransitionsIntentService");
         beepHelper = new BeepHelper();
+        
     }
     /**
      * Handles incoming intents
@@ -28,6 +38,9 @@ public class ReceiveTransitionsIntentService extends IntentService {
      */
     @Override
     protected void onHandleIntent(Intent intent) {
+    	taskNotifier = new TaskNotifier((NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE), this);
+    	TaskService taskService = new TaskService(this.getApplicationContext());
+    	JSONArray tasks = taskService.GetTasks();
         // First check for errors
         if (LocationClient.hasError(intent)) {
             // Get the error code with a static method
@@ -48,26 +61,31 @@ public class ReceiveTransitionsIntentService extends IntentService {
             // Get the type of transition (entry or exit)
             int transitionType =
                     LocationClient.getGeofenceTransition(intent);
-            // Test that a valid transition was reported
-            if (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER)
-            {
-            	beepHelper.startTone("beep_beep_beep");
-            }
-            else if(transitionType == Geofence.GEOFENCE_TRANSITION_EXIT){
-            	beepHelper.startTone("chirp_chirp_chirp");
-            }
+//            // Test that a valid transition was reported
+//            if (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER)
+//            {
+//            	notify("Wejście");
+//            	beepHelper.startTone("beep_beep_beep");
+//            }
+//            else if(transitionType == Geofence.GEOFENCE_TRANSITION_EXIT){
+//            	notify("Wyjście");
+//            	beepHelper.startTone("chirp_chirp_chirp");
+//            }
             		
-//                (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER)
-//                 ||
-//                (transitionType == Geofence.GEOFENCE_TRANSITION_EXIT)
-//               ) {
-//                List <Geofence> triggerList = LocationClient.getTriggeringGeofences(intent);
-//                
-//                for(Geofence fence : triggerList){
-//                	
-//                }
-//                
-            //}
+              if  ((transitionType == Geofence.GEOFENCE_TRANSITION_ENTER)
+                 ||
+                (transitionType == Geofence.GEOFENCE_TRANSITION_EXIT)
+               ) {
+                List <Geofence> triggerList = LocationClient.getTriggeringGeofences(intent);
+                
+                for(Geofence fence : triggerList){
+                	String fenceId = fence.getRequestId();
+                	JSONObject task = taskService.FindTaskById(tasks, fenceId);
+                	if(task != null){
+                		taskNotifier.notify(task, (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER));
+                	}
+                }
+            }
             else {
                 Log.e("ReceiveTransitionsIntentService",
                         "Geofence transition error: " +
@@ -75,5 +93,4 @@ public class ReceiveTransitionsIntentService extends IntentService {
             }
         } 
     }
-
 }

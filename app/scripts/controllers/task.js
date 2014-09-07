@@ -1,34 +1,26 @@
 angular.module('donebytheway.controllers')
-    .controller('TaskCtrl', function($scope,$ionicActionSheet, $stateParams, $log, $location, $state, $ionicModal, locationService, taskRepetitionService, repetitionFrequency, taskService) {
-        var taskId = $stateParams.taskId;
-        var task;
-        $scope.taskId = taskId;
-        taskService.findById(taskId).then(function(t){
-            task = t;
-            if (!task) {
-                task = taskService.createNew();
-            }
-            $scope.task = task; 
-            $ionicModal.fromTemplateUrl('views/task-repetition-popup.html', {
-                scope: $scope,
-                animation: 'slide-in-up'
-            }).then(function(modal) {
-                $scope.repetitionModal = modal;
-            });
+    .controller('TaskCtrl', function($scope, task, $ionicActionSheet, $stateParams, $log, $location, $state, $ionicModal, locationService, taskRepetitionService, repetitionFrequency, taskService) {
+        $scope.task = task;
+        
+        $ionicModal.fromTemplateUrl('views/task-repetition-popup.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.repetitionModal = modal;
+        });
 
-            $scope.$on('$destroy', function() {
-                $scope.repetitionModal.remove();
-            });
+        $scope.$on('$destroy', function() {
+            $scope.repetitionModal.remove();
         });
 
         $scope.addNewLocation = function() {
             taskService.saveChanges();
-            $location.path('/task/{0}/select-location'.format(taskId));
+            $state.go('task-select-location', { taskId: task.id });
         };
 
-        $scope.changeLocationReminder = function(locationReminder) {
+        $scope.changeLocation = function(locationReminder) {
             locationService.selectedLocationReminder = locationReminder;
-            $location.path('/task/{0}/location-map'.format(taskId));
+            $state.go('task-select-location-map', { taskId: task.id });
         };
 
         $scope.removeLocation = function(locationReminder) {
@@ -59,7 +51,7 @@ angular.module('donebytheway.controllers')
                 destructiveButtonClicked: function(){
                     taskService.remove(task);
                     taskService.saveChanges();
-                    $state.go('app.tasks');
+                    $state.go('main-menu.tasks');
                 }
             });
         }

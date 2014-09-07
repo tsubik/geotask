@@ -23,4 +23,20 @@ public class TaskService {
 		}
 		return new JSONArray();
 	}
+	
+	public JSONObject FindTaskById(JSONArray tasks, String id){
+		for (int i = 0; i < tasks.length(); i++) {
+			JSONObject task;
+			try {
+				task = tasks.getJSONObject(i);
+				if(task.getString("id") == id){
+					return task;
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 }

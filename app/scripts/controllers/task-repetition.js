@@ -1,5 +1,5 @@
 angular.module('donebytheway.controllers')
-    .controller('TaskRepetitionCtrl', function($scope,$log, taskService, taskRepetitionService, dayOfWeek, repetitionFrequency) {
+    .controller('TaskRepetitionCtrl', function($scope, taskRepetitionService, dayOfWeek, repetitionFrequency) {
         $scope.frequencies = [
             { value: repetitionFrequency.DAILY, title: 'Codziennie' },
             { value: repetitionFrequency.WEEKLY, title: 'Co tydzień'},
