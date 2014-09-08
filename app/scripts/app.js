@@ -7,6 +7,7 @@ angular.module('donebytheway.directives', ['donebytheway.enums']);
 
 angular.module('donebytheway', [
     'ionic',
+    'toasty',
     'leaflet-directive',
     'ion-search-place',
     'geolocation',
@@ -59,6 +60,20 @@ angular.module('donebytheway', [
                     'menuContent': {
                         templateUrl: 'views/tasks-done.html',
                         controller: 'DoneTasksCtrl'
+                    }
+                }
+            })
+            .state('main-menu.settings', {
+                url: '/settings',
+                views: {
+                    menuContent: {
+                        templateUrl: 'views/settings.html',
+                        controller: 'SettingsCtrl'
+                    }
+                },
+                resolve: {
+                    settings: function(){
+
                     }
                 }
             })

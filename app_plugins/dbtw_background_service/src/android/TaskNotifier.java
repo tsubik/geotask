@@ -16,10 +16,12 @@ import android.content.Intent;
 public class TaskNotifier {
 	private NotificationManager notificationManager;
 	private Context context;
+	private BeepHelper beepHelper;
 	
 	public TaskNotifier(NotificationManager notificationManager, Context context){
 		this.notificationManager = notificationManager;
 		this.context = context;
+		this.beepHelper = new BeepHelper();
 	}
 	
 	public void notify(JSONObject task, boolean isEntered){
@@ -31,7 +33,6 @@ public class TaskNotifier {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
 		Log.d("BTWService", "notification");
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
 		    .setSmallIcon(R.drawable.ic_notification_overlay)
@@ -60,6 +61,7 @@ public class TaskNotifier {
 		        );
 		mBuilder.setContentIntent(resultPendingIntent);
 		
+		beepHelper.startTone("beep_beep_beep");
 		notificationManager.notify(100, mBuilder.build());
 	}
 }

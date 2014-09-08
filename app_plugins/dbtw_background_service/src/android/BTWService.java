@@ -65,7 +65,8 @@ public class BTWService extends Service implements
 	private Context _Context;
 	protected LocationManager locationManager;
 	protected TaskService taskService;
-
+	protected Logger logger;
+	
 	private NotificationManager notificationManager;
 	// Internal List of Geofence objects
     List<Geofence> geoFences;
@@ -109,6 +110,7 @@ public class BTWService extends Service implements
 		taskService = new TaskService(this.getApplicationContext());
 		tasks = taskService.GetTasks();
 		geoFences = new ArrayList<Geofence>();
+		logger = new Logger(TAG, _Context, true);
 		setGeoFences(tasks);
 //		
 //		taskNotifier = new TaskNotifier((NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE), this);
@@ -133,7 +135,7 @@ public class BTWService extends Service implements
         
         servicesAvailable = servicesConnected();
         if(servicesAvailable){
-        	Log.d(TAG, "Google play services available");
+        	logger.log(Log.DEBUG, "Google play services available");
         }
         /*
          * Create a new location client, using the enclosing class to
@@ -247,9 +249,9 @@ public class BTWService extends Service implements
 		setUpLocationClientIfNeeded();
         if(!mLocationClient.isConnected() || !mLocationClient.isConnecting() && !mInProgress)
         {
-        	Log.d(TAG,"Starting onStartCommand");
+        	logger.log(Log.DEBUG, "Starting onStartCommand");
         	mInProgress = true;
-        	Log.d(TAG,"Connecting location client");
+        	logger.log(Log.DEBUG,"Connecting location client");
         	mLocationClient.connect();
         }
 		
@@ -334,7 +336,7 @@ public class BTWService extends Service implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
     	mInProgress = false;
-    	Log.d(TAG, "Connecting to google services fail - " + connectionResult.toString());
+    	logger.log(Log.DEBUG, "Connecting to google services fail - " + connectionResult.toString());
         /*
          * Google Play services can resolve some errors it detects.
          * If the error has a resolution, try sending an Intent to
@@ -374,8 +376,8 @@ public class BTWService extends Service implements
      */
     @Override
     public void onConnected(Bundle dataBundle) {
-        Log.d(TAG, "Google play services connected");
-        Log.d(TAG, "Adding geofences");
+        logger.log(Log.DEBUG, "Google play services connected");
+        logger.log(Log.DEBUG, "Adding geofences");
      // Get the PendingIntent for the request
         mLocationClient.addGeofences(geoFences, getTransitionPendingIntent(), this);
 //    	// Request location updates using static settings
@@ -393,14 +395,14 @@ public class BTWService extends Service implements
             int statusCode, String[] geofenceRequestIds) {
         // If adding the geofences was successful
         if (LocationStatusCodes.SUCCESS == statusCode) {
-        	Log.d(TAG,"Geofences successfully added");
+        	logger.log(Log.DEBUG, "Geofences successfully added");
             /*
              * Handle successful addition of geofences here.
              * You can send out a broadcast intent or update the UI.
              * geofences into the Intent's extended data.
              */
         } else {
-        	Log.d(TAG,"Adding geofences failed");
+        	logger.log(Log.DEBUG, "Adding geofences failed");
         // If adding the geofences failed
             /*
              * Report errors here.
@@ -427,7 +429,7 @@ public class BTWService extends Service implements
         mLocationClient = null;
         // Display the connection status
         // Toast.makeText(this, DateFormat.getDateTimeInstance().format(new Date()) + ": Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "Google play services Disconnected");
+        logger.log(Log.DEBUG, "Google play services Disconnected");
     }
 
 	@Override

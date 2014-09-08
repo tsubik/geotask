@@ -1,5 +1,5 @@
 angular.module('donebytheway.controllers')
-.controller('TasksCtrl', function($scope,$state,$log, taskService){
+.controller('TasksCtrl', function($scope,toasty,$state,$log, taskService){
     $scope.tasks = [];
     if($state.is('main-menu.nearby-tasks')){
         $scope.title = 'Zadania w pobliżu';
@@ -39,6 +39,12 @@ angular.module('donebytheway.controllers')
             taskService.markAsDone(task);
         });
         taskService.saveChanges();
+        // toasty.pop.success({
+        //     title: "Success!",
+        //     msg: 'Click to change me.',
+        //     timeout: 0,
+        //     duration: 2000
+        // });
     };
 
     $scope.removeSelectedTasks = function(){;

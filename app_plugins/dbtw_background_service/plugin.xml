@@ -21,6 +21,7 @@
 
     <!-- android -->
     <platform name="android">
+        <source-file src="src/android/BTWPlugin.java" target-dir="src/com/tsubik/cordova/dbtw_background_service" />
         <source-file src="src/android/BTWService.java" target-dir="src/com/tsubik/cordova/dbtw_background_service" />
         <source-file src="src/android/StartAppAtBootReceiver.java" target-dir="src/com/tsubik/cordova/dbtw_background_service" />
         <source-file src="src/android/TaskService.java" target-dir="src/com/tsubik/cordova/dbtw_background_service" />

@@ -40,6 +40,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
     	taskNotifier = new TaskNotifier((NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE), this);
     	TaskService taskService = new TaskService(this.getApplicationContext());
+    	Logger logger = new Logger("BTWService", this.getApplicationContext(), true);
     	JSONArray tasks = taskService.GetTasks();
         // First check for errors
         if (LocationClient.hasError(intent)) {
@@ -76,18 +77,20 @@ public class ReceiveTransitionsIntentService extends IntentService {
                  ||
                 (transitionType == Geofence.GEOFENCE_TRANSITION_EXIT)
                ) {
+            	 logger.log(Log.DEBUG, "Geofence transition detected");
                 List <Geofence> triggerList = LocationClient.getTriggeringGeofences(intent);
                 
                 for(Geofence fence : triggerList){
                 	String fenceId = fence.getRequestId();
                 	JSONObject task = taskService.FindTaskById(tasks, fenceId);
                 	if(task != null){
+                		
                 		taskNotifier.notify(task, (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER));
                 	}
                 }
             }
             else {
-                Log.e("ReceiveTransitionsIntentService",
+            	logger.log(Log.ERROR,
                         "Geofence transition error: " +
                         transitionType);
             }
