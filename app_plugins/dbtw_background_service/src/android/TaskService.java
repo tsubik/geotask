@@ -29,7 +29,7 @@ public class TaskService {
 			JSONObject task;
 			try {
 				task = tasks.getJSONObject(i);
-				if(task.getString("id") == id){
+				if(task.getString("id").equals(id)){
 					return task;
 				}
 			} catch (JSONException e) {

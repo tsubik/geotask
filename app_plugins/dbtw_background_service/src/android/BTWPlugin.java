@@ -19,23 +19,38 @@ public class BTWPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-//        Log.d(TAG, "BTWPlugin execute action: "+ action + " args: " + args.toString());
-//        ServiceDetails
-//        
-//        if(action.equalsIgnoreCase("startService")){
-//            callbackContext.success(this.localStorage.getItem(o.getString("key")));    
-//        }
-//        else if(action.equalsIgnoreCase("stopService")){ 
-//            this.localStorage.setItem(o.getString("key"), o.getString("value"));    
-//        }
-//        else if(action.equalsIgnoreCase("getStatus")){ 
-//            this.localStorage.removeItem(o.getString("key"));
-//        }
-//        else{ 
-//            return false;
-//        }
+        Log.d(TAG, "BTWPlugin execute action: "+ action + " args: " + args.toString());
+        
+        if(action.equalsIgnoreCase("startService")){
+        	startService();
+        	callbackContext.success();
+        }
+        else if(action.equalsIgnoreCase("stopService")){ 
+        	stopService();
+        	callbackContext.success();
+        }
+        else if(action.equalsIgnoreCase("getStatus")){ 
+        	callbackContext.success(String.valueOf(isServiceRunning()));
+        }
+        else{ 
+            return false;
+        }
         return true;
 
+    }
+    
+    private void startService(){
+    	Context context = this.cordova.getActivity().getApplicationContext();
+    	Intent intent = new Intent(context, com.tsubik.cordova.dbtw_background_service.BTWService.class);
+    	Log.d(TAG, "Attempting to start service");
+    	context.startService(intent);
+    }
+    
+    private void stopService(){
+    	Context context = this.cordova.getActivity().getApplicationContext();
+    	Intent intent = new Intent(context, com.tsubik.cordova.dbtw_background_service.BTWService.class);
+    	Log.d(TAG, "Attempting to stop service");
+    	context.stopService(intent);
     }
     
     private boolean isServiceRunning()
@@ -59,59 +74,6 @@ public class BTWPlugin extends CordovaPlugin {
 	}
 
 }
-
-
-			
-//
-//	public ExecuteResult startService()
-//	{
-//		Log.d(LOCALTAG, "Starting startService");
-//		ExecuteResult result = null;
-//		
-//		try {
-//			Log.d(LOCALTAG, "Attempting to bind to Service");
-//			if (this.bindToService()) {
-//				Log.d(LOCALTAG, "Bind worked");
-//				result = new ExecuteResult(ExecuteStatus.OK, createJSONResult(true, ERROR_NONE_CODE, ERROR_NONE_MSG));
-//			} else {
-//				Log.d(LOCALTAG, "Bind Failed");
-//				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_UNABLE_TO_BIND_TO_BACKGROUND_SERVICE_CODE, ERROR_UNABLE_TO_BIND_TO_BACKGROUND_SERVICE_MSG));
-//			}
-//		} catch (Exception ex) {
-//			Log.d(LOCALTAG, "startService failed", ex);
-//			result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
-//		}
-//		
-//		Log.d(LOCALTAG, "Finished startService");
-//		return result;
-//	}
-//	
-//	public ExecuteResult stopService()
-//	{
-//		ExecuteResult result = null;
-//		
-//		Log.d("ServiceDetails", "stopService called");
-//
-//		try {
-//			
-//			Log.d("ServiceDetails", "Unbinding Service");
-//			this.mContext.unbindService(serviceConnection);
-//			
-//			Log.d("ServiceDetails", "Stopping service");
-//			if (this.mContext.stopService(this.mService))
-//			{
-//				Log.d("ServiceDetails", "Service stopped");
-//			} else {
-//				Log.d("ServiceDetails", "Service not stopped");
-//			}
-//			result = new ExecuteResult(ExecuteStatus.OK, createJSONResult(true, ERROR_NONE_CODE, ERROR_NONE_MSG));
-//		} catch (Exception ex) {
-//			Log.d(LOCALTAG, "stopService failed", ex);
-//			result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
-//		}
-//		
-//		return result;
-//	}
 
 //	
 //	public ExecuteResult getStatus()

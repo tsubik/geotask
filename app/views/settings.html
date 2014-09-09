@@ -5,16 +5,6 @@
         </button>
     </ion-nav-bar>
     <ion-content>
-       <ul class="list">	
-		  <li class="item item-toggle">
-		     Powiadomienia
-		     <label class="toggle toggle-positive">
-		       <input type="checkbox">
-		       <div class="track">
-		         <div class="handle"></div>
-		       </div>
-		     </label>
-		  </li>
-		</ul>
+       <ion-toggle ng-model="settings.isRunning" ng-change="changeServiceState()" toggle-class="toggle-calm">Powiadomienia</ion-toggle>
     </ion-content>
 </ion-view>

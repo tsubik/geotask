@@ -72,8 +72,12 @@ angular.module('donebytheway', [
                     }
                 },
                 resolve: {
-                    settings: function(){
-
+                    settings: function(settingsService){
+                        return settingsService.getBackGroundServiceState().then(function(isRunning){
+                            return {
+                                isRunning: isRunning
+                            };
+                        });
                     }
                 }
             })
