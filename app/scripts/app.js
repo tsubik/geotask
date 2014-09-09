@@ -1,6 +1,12 @@
-angular.module('donebytheway.controllers', ['donebytheway.services','donebytheway.enums']);
+angular.module('donebytheway.controllers', ['ionic','donebytheway.services','donebytheway.enums'])
+    .config(function(){
+        console.log('controllers');
+    });
 angular.module('donebytheway.enums', []);
-angular.module('donebytheway.services', ['donebytheway.enums']);
+angular.module('donebytheway.services', ['ionic','donebytheway.enums'])
+    .config(function(){
+        console.log('services');
+    });;
 angular.module('donebytheway.filters', ['donebytheway.enums']);
 angular.module('donebytheway.directives', ['donebytheway.enums']);
 
@@ -18,6 +24,7 @@ angular.module('donebytheway', [
     'donebytheway.filters'
 ])
     .config(function($stateProvider, $urlRouterProvider,$ionicNavBarConfig, $ionicTabsConfig) {
+        console.log('Configure app');
         $ionicTabsConfig.type = '';
         $stateProvider
             //Main menu

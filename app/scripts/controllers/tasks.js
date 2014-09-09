@@ -2,10 +2,10 @@ angular.module('donebytheway.controllers')
 .controller('TasksCtrl', function($scope,toasty,$state,$log, taskService){
     $scope.tasks = [];
     if($state.is('main-menu.nearby-tasks')){
-        $scope.title = 'Zadania w pobliżu';
+        $scope.subTitle = 'Zadania w pobliżu';
     } 
     else{
-        $scope.title = 'Wszystkie zadania';
+        $scope.subTitle = 'Wszystkie zadania';
     }    
 
     function getTasksByState(){

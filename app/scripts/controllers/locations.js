@@ -1,6 +1,7 @@
 angular.module('donebytheway.controllers')
 .controller('LocationsCtrl', function($scope, $log, $state, locationService){
 	$scope.locations = [];
+    $scope.subTitle = "Zapamiętane lokalizacje";
     locationService.getAll().then(function(locations){
         $scope.locations = locations;
     });
