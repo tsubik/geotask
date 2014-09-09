@@ -1,12 +1,6 @@
-angular.module('donebytheway.controllers', ['ionic','donebytheway.services','donebytheway.enums'])
-    .config(function(){
-        console.log('controllers');
-    });
+angular.module('donebytheway.controllers', ['ionic','donebytheway.services','donebytheway.enums']);
 angular.module('donebytheway.enums', []);
-angular.module('donebytheway.services', ['ionic','donebytheway.enums'])
-    .config(function(){
-        console.log('services');
-    });;
+angular.module('donebytheway.services', ['ionic','donebytheway.enums']);
 angular.module('donebytheway.filters', ['donebytheway.enums']);
 angular.module('donebytheway.directives', ['donebytheway.enums']);
 
@@ -169,6 +163,20 @@ angular.module('donebytheway', [
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/tasks');
 
+    })
+    .run(function($state, $log){
+        window.plugins.webintent.getExtra("tsubik.geotask.loadTask",
+            function(taskJson) {
+                if(taskJson){
+                    var task = angular.fromJson(taskJson);
+                    $log.log('tsubik.geotask.loadTask', task);
+                    $state.go('task.default', { taskId: task.id });
+                }
+            }, function() {
+                $log.log('no extra tsubik.geotask.loadTask supplied');
+                // There was no extra supplied.
+            }
+        );
     });
 
 ionic.Platform.ready(function() {
