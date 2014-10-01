@@ -1,5 +1,5 @@
 angular.module('donebytheway.services')
-    .factory('taskService', function($log,locationService, geolocation, taskRepetitionService, repetitionFrequency, storage, $q) {
+    .factory('taskService', function($log,geofence,locationService, geolocation, taskRepetitionService, repetitionFrequency, storage, $q) {
 
         var taskService = {
             _tasks: [],
@@ -22,6 +22,22 @@ angular.module('donebytheway.services')
             markAsDone: function(task) {
                 this.remove(task);
                 this._doneTasks.push(task);
+            },
+            syncLocationReminder: function(task){
+                if(task.locationReminders.length > 0){
+                    var geoNotifications = task.locationReminders.map(function(lr){
+                        return {
+                            id: lr.id,
+                            notificationText: lr.location.name,
+                            latitude: lr.location.coords.latitude,
+                            longitude: lr.location.coords.longitude,
+                            radius: lr.radius,
+                            transitionType: lr.whenIgetCloser ? 1 : 0,
+                            data: task
+                        };
+                    });
+                    geofence.addOrUpdate(geoNotifications);
+                }
             },
             addIfNotAdded: function(task) {
                 if (!this._tasks.firstOrDefault(function(t) {

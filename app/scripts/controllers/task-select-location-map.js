@@ -94,6 +94,7 @@ angular.module('donebytheway.controllers')
                     task.locationReminders.push(locationReminder);
                 }
                 taskService.saveChanges();
+                taskService.syncLocationReminder(task);
             });
         };
 
@@ -103,12 +104,17 @@ angular.module('donebytheway.controllers')
             locationService.saveChanges();
         };
 
-        function updateMaxRadiusRange(){
+        function updateMaxRadiusRange() {
             leafletData.getMap().then(function(map) {
                 var bounds = map.getBounds();
                 var boundsDistanceRadius = geolocation.getDistance(bounds.getNorthWest(), bounds.getSouthEast()) * 1000 / 2;
                 if (boundsDistanceRadius > $scope.paths.circle.radius) {
                     $scope.maxRadiusRange = boundsDistanceRadius;
+                    $scope.paths.circle.radius -= 1;
+                    //fucked up way, but it works
+                    $timeout(function() {
+                        $scope.paths.circle.radius += 1;
+                    });
                 }
             });
         }

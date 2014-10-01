@@ -54,5 +54,6 @@ angular.module('donebytheway.controllers')
                     $state.go('main-menu.tasks');
                 }
             });
-        }
+        };
+ 
     });

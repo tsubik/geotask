@@ -23,7 +23,7 @@ angular.module('donebytheway.controllers')
     $scope.selectLocation = function(location){
         locationService.selectedLocationReminder = {
             id: UUIDjs.create().toString(),
-            location: location,
+            location: angular.copy(location),
             radius: 1000,
             whenIgetCloser: true
         };

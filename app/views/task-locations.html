@@ -1,8 +1,7 @@
 <ion-view>
 	<ion-content>
 	    <div class="list list-inset">
-	        <a class="item item-icon-left item-icon-right" on-tap="changeLocationReminder(locationReminder)" ng-repeat="locationReminder in task.locationReminders">
-	        	<i class="icon ion-arrow-shrink"></i>
+	        <a class="item item-icon-left item-icon-right" on-tap="changeLocation(locationReminder)" ng-repeat="locationReminder in task.locationReminders">
 	            <span ng-bind-html="locationReminder | locationReminder"></span>
 	            <i class="icon ion-trash-b" on-tap="removeLocation(locationReminder)"></i>
 	        </a>

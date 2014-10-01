@@ -25,6 +25,11 @@ angular.module('donebytheway.services')
 						this._isRunning = false; 
 						def.resolve(true);
 						return def.promise;
+					},
+					addGeoNotifications: function(){
+						var def = $q.defer();
+						def.resolve(true);
+						return def.promise;
 					}
 				};
 			}
@@ -39,6 +44,9 @@ angular.module('donebytheway.services')
 			},
 			stopBackGroundService: function(){
 				return backgroundService.stopService();
+			},
+			addGeoNotifications: function(geoNotifications){
+				return backgroundService.addGeoNotifications(geoNotifications);
 			}
 		}
 	})

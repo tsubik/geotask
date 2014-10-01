@@ -164,19 +164,21 @@ angular.module('donebytheway', [
         $urlRouterProvider.otherwise('/tasks');
 
     })
-    .run(function($state, $log){
-        window.plugins.webintent.getExtra("tsubik.geotask.loadTask",
-            function(taskJson) {
-                if(taskJson){
-                    var task = angular.fromJson(taskJson);
-                    $log.log('tsubik.geotask.loadTask', task);
-                    $state.go('task.default', { taskId: task.id });
+    .run(function($state, $window, $log){
+        if($window.plugins && $window.plugins.webintent){
+            $window.plugins.webintent.getExtra("tsubik.geotask.loadTask",
+                function(taskJson) {
+                    if(taskJson){
+                        var task = angular.fromJson(taskJson);
+                        $log.log('tsubik.geotask.loadTask', task);
+                        $state.go('task.default', { taskId: task.id });
+                    }
+                }, function() {
+                    $log.log('no extra tsubik.geotask.loadTask supplied');
+                    // There was no extra supplied.
                 }
-            }, function() {
-                $log.log('no extra tsubik.geotask.loadTask supplied');
-                // There was no extra supplied.
-            }
-        );
+            );
+        }
     });
 
 ionic.Platform.ready(function() {
