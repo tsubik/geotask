@@ -1,7 +1,7 @@
-<ion-view title="{{locationReminder.location.name}}">
+<ion-view>
     <ion-nav-bar class="bar-positive" animation="nav-title-slide-ios7">
         <button class="button button-icon" ng-click="goBack()">
-            <i class="ion-chevron-left"></i>
+            <i class="ion-chevron-left"></i> {{locationReminder.location.name}}
         </button>
         <div class="buttons pull-right">
             <button class="button button-icon icon ion-edit" ng-click="edit()"></button>

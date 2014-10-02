@@ -8,6 +8,7 @@ angular.module('donebytheway', [
     'ionic',
     'toasty',
     'leaflet-directive',
+    'angular-datepicker',
     'ion-search-place',
     'geolocation',
     'donebytheway.enums',

@@ -5,10 +5,10 @@
                 <span class="input-label">Od Kiedy?</span>
                 <div class="row">
                     <div class="col">
-                        <input type="date" class="underlined" ng-model="task.dateFrom">
+                        <input type="text" pick-a-date="task.dateFrom" placeholder="Data od" />
                     </div>
                     <div class="col">
-                        <input type="time" class="underlined" ng-model="task.timeFrom">
+                        <input type="text" pick-a-time="task.timeFrom" placeholder="Cały dzień" />
                     </div>
                 </div>
             </div>
@@ -16,11 +16,10 @@
                 <span class="input-label">Do Kiedy?</span>
                 <div class="row">
                     <div class="col">
-                        <date-picker ng-model="task.dateTo"> </date-picker>
-                        <!-- <input type="date" date-picker class="underlined" ng-model="task.dateTo">
-                     --></div>
+                        <input type="text" pick-a-date="task.dateTo" placeholder="Data do" />
+                    </div>
                     <div class="col">
-                        <input type="time" class="underlined" ng-mogel="task.timeTo">
+                        <input type="text" pick-a-date="task.timeTo" placeholder="Cały dzień" />
                     </div>
                 </div>
             </div>
