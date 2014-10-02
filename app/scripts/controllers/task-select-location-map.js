@@ -1,12 +1,14 @@
 angular.module('donebytheway.controllers')
     .controller('TaskSelectLocationMapCtrl', function ($scope, locationReminder, $ionicActionSheet, $state, $log, $timeout, $ionicNavBarDelegate, $stateParams, taskService, locationService, leafletEvents, leafletData, geolocation) {
-        var taskId = $stateParams.taskId;
+        var taskId = $stateParams.taskId,
+            isDragging = false,
+            touchStartTime;
 
         $scope.locationReminder = locationReminder;
 
         $scope.events = {
             map: {
-                enable: ['zoomend'],
+                enable: ['zoomend', 'contextmenu'],
                 logic: 'emit'
             }
         };
@@ -35,6 +37,7 @@ angular.module('donebytheway.controllers')
         $scope.maxRadiusRange = locationReminder.radius;
         updateMaxRadiusRange();
         $scope.$on('leafletDirectiveMap.zoomend', updateMaxRadiusRange);
+        $scope.$on('leafletDirectiveMap.contextmenu', mapSetMarker);
 
         $scope.edit = function () {
             var newName = prompt('Wpisz nazwę lokalizacji', locationReminder.location.name);
@@ -44,7 +47,7 @@ angular.module('donebytheway.controllers')
         };
 
         $scope.save = function () {
-            var actionSheet = $ionicActionSheet.show({
+            $ionicActionSheet.show({
                 buttons: [{
                     text: 'Zapisz'
                 }, {
@@ -117,5 +120,10 @@ angular.module('donebytheway.controllers')
                     });
                 }
             });
+        }
+
+        function mapSetMarker(event, args) {
+            $scope.markers.marker.lat = args.leafletEvent.latlng.lat;
+            $scope.markers.marker.lng = args.leafletEvent.latlng.lng;
         }
     });
