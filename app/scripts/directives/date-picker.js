@@ -1,6 +1,6 @@
 angular.module('donebytheway.directives')
     .directive('datePicker',
-        function($window) {
+        function ($window) {
             if (!$window.datePicker) {
                 return {};
             }
@@ -9,17 +9,17 @@ angular.module('donebytheway.directives')
                 restrict: 'E',
                 require: 'ngModel',
                 template: '{{date}}',
-                link: function(scope, element, ngModelCtrl) {
+                link: function (scope, element, ngModelCtrl) {
 
                     scope.date = ngModelCtrl.$viewValue || 'Kiedykolwiek';
-                    element.bind('focus', function() {
+                    element.bind('focus', function () {
                         var options = {
                             date: new Date(),
                             mode: 'date'
                         };
 
                         //This event is fired when the user has selected a date on the DatePicker
-                        $window.datePicker.show(options, function(date) {
+                        $window.datePicker.show(options, function (date) {
                             ngModelCtrl.$setViewValue(date);
                         });
                     });

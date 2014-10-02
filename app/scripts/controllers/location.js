@@ -1,5 +1,5 @@
 angular.module('donebytheway.controllers')
-    .controller('LocationCtrl', function($scope, location) {
+    .controller('LocationCtrl', function ($scope, location) {
         $scope.location = location;
 
         $scope.map = {
@@ -20,10 +20,10 @@ angular.module('donebytheway.controllers')
             }
         };
 
-        $scope.edit = function() {
+        $scope.edit = function () {
             var newLocationName = prompt('Nazwa lokalizacji', location.name);
             if (newLocationName) {
                 location.name = newLocationName;
             }
-        }
+        };
     });

@@ -7,13 +7,13 @@ angular.module('ion-search-place', [])
         '$rootScope',
         '$document',
         'geolocation',
-        function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $document, geolocation) {
+        function ($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $document, geolocation) {
             return {
                 require: '?ngModel',
                 restrict: 'E',
                 template: '<input type="text" readonly="readonly" ng-click="popup()" class="ion-search-place" autocomplete="off">',
                 replace: true,
-                link: function(scope, element, attrs, ngModel) {
+                link: function (scope, element, attrs, ngModel) {
                     scope.searched_locations = [];
                     var searchEventTimeout = undefined;
 
@@ -42,10 +42,10 @@ angular.module('ion-search-place', [])
                         appendTo: $document[0].body
                     });
 
-                    popupPromise.then(function(el) {
+                    popupPromise.then(function (el) {
                         var searchInputElement = angular.element(el.element.find('input'));
 
-                        scope.selectLocation = function(location) {
+                        scope.selectLocation = function (location) {
                             ngModel.$setViewValue(location);
                             ngModel.$render();
                             el.element.css('display', 'none');
@@ -53,33 +53,33 @@ angular.module('ion-search-place', [])
                             //$ionicBackdrop.release();
                         };
 
-                        scope.$watch('searchQuery', function(query) {
+                        scope.$watch('searchQuery', function (query) {
                             //scope.searched_locations.push({ display_name: 'Duupa'});
                             if (searchEventTimeout) $timeout.cancel(searchEventTimeout);
-                            searchEventTimeout = $timeout(function() {
+                            searchEventTimeout = $timeout(function () {
                                 if (!query) return;
                                 if (query.length < 3);
                                 var locations = geolocation.query({
                                     q: query,
                                     limit: 5
-                                }, function() {
+                                }, function () {
                                     scope.searched_locations = locations;
                                 });
                             }, 500); // we're throttling the input by 500ms to be nice to geolocation API
                         });
 
-                        var onClick = function(e) {
+                        var onClick = function (e) {
                             e.preventDefault();
                             e.stopPropagation();
                             //$ionicBackdrop.retain();
                             el.element.css('display', 'block');
                             searchInputElement[0].focus();
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 searchInputElement[0].focus();
                             }, 0);
                         };
 
-                        var onCancel = function(e) {
+                        var onCancel = function (e) {
                             scope.searchQuery = '';
                             scope.searched_locations = [];
                             //$ionicBackdrop.release();
@@ -97,16 +97,16 @@ angular.module('ion-search-place', [])
                     }
 
 
-                    ngModel.$formatters.unshift(function(modelValue) {
+                    ngModel.$formatters.unshift(function (modelValue) {
                         if (!modelValue) return '';
                         return modelValue;
                     });
 
-                    ngModel.$parsers.unshift(function(viewValue) {
+                    ngModel.$parsers.unshift(function (viewValue) {
                         return viewValue;
                     });
 
-                    ngModel.$render = function() {
+                    ngModel.$render = function () {
                         if (!ngModel.$viewValue) {
                             element.val('');
                         } else {

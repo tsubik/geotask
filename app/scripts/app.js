@@ -1,9 +1,8 @@
-angular.module('donebytheway.controllers', ['ionic','donebytheway.services','donebytheway.enums']);
+angular.module('donebytheway.controllers', ['ionic', 'donebytheway.services', 'donebytheway.enums']);
 angular.module('donebytheway.enums', []);
-angular.module('donebytheway.services', ['ionic','donebytheway.enums']);
+angular.module('donebytheway.services', ['ionic', 'donebytheway.enums']);
 angular.module('donebytheway.filters', ['donebytheway.enums']);
 angular.module('donebytheway.directives', ['donebytheway.enums']);
-
 
 angular.module('donebytheway', [
     'ionic',
@@ -17,17 +16,17 @@ angular.module('donebytheway', [
     'donebytheway.services',
     'donebytheway.filters'
 ])
-    .config(function($stateProvider, $urlRouterProvider,$ionicNavBarConfig, $ionicTabsConfig) {
+    .config(function ($stateProvider, $urlRouterProvider, $ionicNavBarConfig, $ionicTabsConfig) {
         console.log('Configure app');
         $ionicTabsConfig.type = '';
         $stateProvider
-            //Main menu
-            .state('main-menu', {
-                url: "",
-                abstract: true,
-                templateUrl: "views/main-menu.html",
-                controller: 'MainMenuCtrl'
-            })
+        //Main menu
+        .state('main-menu', {
+            url: '',
+            abstract: true,
+            templateUrl: 'views/main-menu.html',
+            controller: 'MainMenuCtrl'
+        })
             .state('main-menu.locations', {
                 url: '/locations',
                 views: {
@@ -73,8 +72,8 @@ angular.module('donebytheway', [
                     }
                 },
                 resolve: {
-                    settings: function(settingsService){
-                        return settingsService.getBackGroundServiceState().then(function(isRunning){
+                    settings: function (settingsService) {
+                        return settingsService.getBackGroundServiceState().then(function (isRunning) {
                             return {
                                 isRunning: isRunning
                             };
@@ -83,25 +82,25 @@ angular.module('donebytheway', [
                 }
             })
 
-            //Task edition
-            .state('task', {
-                url: '/task/:taskId',
-                abstract: true,
-                templateUrl: 'views/task.html',
-                controller: 'TaskCtrl',
-                resolve: {
-                    task: function(taskService, $stateParams){
-                        return taskService.findById($stateParams.taskId);
-                    }
-                },
-                onExit: function(taskService){
-                    if(taskService.createdTask && taskService.createdTask.note){
-                        taskService.addIfNotAdded(taskService.createdTask);
-                        taskService.saveChanges();    
-                        taskService.createdTask = undefined;
-                    }
+        //Task edition
+        .state('task', {
+            url: '/task/:taskId',
+            abstract: true,
+            templateUrl: 'views/task.html',
+            controller: 'TaskCtrl',
+            resolve: {
+                task: function (taskService, $stateParams) {
+                    return taskService.findById($stateParams.taskId);
                 }
-            })
+            },
+            onExit: function (taskService) {
+                if (taskService.createdTask && taskService.createdTask.note) {
+                    taskService.addIfNotAdded(taskService.createdTask);
+                    taskService.saveChanges();
+                    taskService.createdTask = undefined;
+                }
+            }
+        })
             .state('task.default', {
                 url: '',
                 views: {
@@ -136,8 +135,8 @@ angular.module('donebytheway', [
                 templateUrl: 'views/task-select-location-map.html',
                 controller: 'TaskSelectLocationMapCtrl',
                 resolve: {
-                    locationReminder: function(locationService, $location){
-                        if(!locationService.selectedLocationReminder){
+                    locationReminder: function (locationService, $location) {
+                        if (!locationService.selectedLocationReminder) {
                             $location.path('/');
                         }
                         return locationService.selectedLocationReminder;
@@ -145,35 +144,37 @@ angular.module('donebytheway', [
                 }
             })
 
-            //Location edition
-            .state('location', {
-                url: '/location/:locationId',
-                templateUrl: 'views/location.html',
-                controller: 'LocationCtrl',
-                resolve: {
-                    location: function(locationService, $stateParams){
-                        return locationService.findById($stateParams.locationId);
-                    }
-                },
-                onExit: function(locationService){
-                    locationService.saveChanges();
+        //Location edition
+        .state('location', {
+            url: '/location/:locationId',
+            templateUrl: 'views/location.html',
+            controller: 'LocationCtrl',
+            resolve: {
+                location: function (locationService, $stateParams) {
+                    return locationService.findById($stateParams.locationId);
                 }
-            })
-            
+            },
+            onExit: function (locationService) {
+                locationService.saveChanges();
+            }
+        });
+
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/tasks');
 
     })
-    .run(function($state, $window, $log){
-        if($window.plugins && $window.plugins.webintent){
-            $window.plugins.webintent.getExtra("tsubik.geotask.loadTask",
-                function(taskJson) {
-                    if(taskJson){
+    .run(function ($state, $window, $log) {
+        if ($window.plugins && $window.plugins.webintent) {
+            $window.plugins.webintent.getExtra('tsubik.geotask.loadTask',
+                function (taskJson) {
+                    if (taskJson) {
                         var task = angular.fromJson(taskJson);
                         $log.log('tsubik.geotask.loadTask', task);
-                        $state.go('task.default', { taskId: task.id });
+                        $state.go('task.default', {
+                            taskId: task.id
+                        });
                     }
-                }, function() {
+                }, function () {
                     $log.log('no extra tsubik.geotask.loadTask supplied');
                     // There was no extra supplied.
                 }
@@ -181,6 +182,6 @@ angular.module('donebytheway', [
         }
     });
 
-ionic.Platform.ready(function() {
+ionic.Platform.ready(function () {
     angular.bootstrap(document, ['donebytheway']);
 });

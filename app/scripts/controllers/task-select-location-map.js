@@ -1,5 +1,5 @@
 angular.module('donebytheway.controllers')
-    .controller('TaskSelectLocationMapCtrl', function($scope, locationReminder, $ionicActionSheet, $state, $log, $timeout, $ionicNavBarDelegate, $stateParams, taskService, locationService, leafletEvents, leafletData, geolocation) {
+    .controller('TaskSelectLocationMapCtrl', function ($scope, locationReminder, $ionicActionSheet, $state, $log, $timeout, $ionicNavBarDelegate, $stateParams, taskService, locationService, leafletEvents, leafletData, geolocation) {
         var taskId = $stateParams.taskId;
 
         $scope.locationReminder = locationReminder;
@@ -36,14 +36,14 @@ angular.module('donebytheway.controllers')
         updateMaxRadiusRange();
         $scope.$on('leafletDirectiveMap.zoomend', updateMaxRadiusRange);
 
-        $scope.edit = function() {
+        $scope.edit = function () {
             var newName = prompt('Wpisz nazwę lokalizacji', locationReminder.location.name);
             if (newName) {
                 locationReminder.location.name = newName;
             }
         };
 
-        $scope.save = function() {
+        $scope.save = function () {
             var actionSheet = $ionicActionSheet.show({
                 buttons: [{
                     text: 'Zapisz'
@@ -51,7 +51,7 @@ angular.module('donebytheway.controllers')
                     text: 'Zapisz i dodaj nową lokalizację'
                 }],
                 cancelText: 'Anuluj',
-                buttonClicked: function(index) {
+                buttonClicked: function (index) {
                     var newLocation = locationService.createNew({
                         name: locationReminder.location.name,
                         coords: {
@@ -60,34 +60,34 @@ angular.module('donebytheway.controllers')
                         }
                     });
                     switch (index) {
-                        case 0:
-                            saveReminder(newLocation);
-                            break;
-                        case 1:
-                            saveReminderAndAddLocation(newLocation);
-                            break;
+                    case 0:
+                        saveReminder(newLocation);
+                        break;
+                    case 1:
+                        saveReminderAndAddLocation(newLocation);
+                        break;
                     }
                     $state.go('task.locations', {
                         taskId: taskId
-                    })
+                    });
                     return true;
                 }
-            })
+            });
         };
 
-        $scope.chooseWhenIgetCloser = function() {
+        $scope.chooseWhenIgetCloser = function () {
             locationReminder.whenIgetCloser = true;
         };
-        $scope.chooseWhenIamLeaving = function() {
+        $scope.chooseWhenIamLeaving = function () {
             locationReminder.whenIgetCloser = false;
         };
 
-        $scope.goBack = function() {
+        $scope.goBack = function () {
             $ionicNavBarDelegate.back();
         };
 
         function saveReminder(newLocation) {
-            taskService.findById(taskId).then(function(task) {
+            taskService.findById(taskId).then(function (task) {
                 locationReminder.location = newLocation;
                 locationReminder.radius = $scope.paths.circle.radius;
                 if (task.locationReminders.indexOf(locationReminder) < 0) {
@@ -96,23 +96,23 @@ angular.module('donebytheway.controllers')
                 taskService.saveChanges();
                 taskService.syncLocationReminder(task);
             });
-        };
+        }
 
         function saveReminderAndAddLocation(newLocation) {
             saveReminder(newLocation);
             locationService.add(newLocation);
             locationService.saveChanges();
-        };
+        }
 
         function updateMaxRadiusRange() {
-            leafletData.getMap().then(function(map) {
+            leafletData.getMap().then(function (map) {
                 var bounds = map.getBounds();
                 var boundsDistanceRadius = geolocation.getDistance(bounds.getNorthWest(), bounds.getSouthEast()) * 1000 / 2;
                 if (boundsDistanceRadius > $scope.paths.circle.radius) {
                     $scope.maxRadiusRange = boundsDistanceRadius;
                     $scope.paths.circle.radius -= 1;
                     //fucked up way, but it works
-                    $timeout(function() {
+                    $timeout(function () {
                         $scope.paths.circle.radius += 1;
                     });
                 }
