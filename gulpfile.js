@@ -1,17 +1,23 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
+var connect = require('gulp-connect');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var order = require('gulp-order');
 var clean = require('gulp-clean');
 var runSequence = require('run-sequence');
+var protractor = require('gulp-protractor').protractor;
+var webdriverUpdate = require('gulp-protractor').webdriver_update;
 
 var paths = {
   sass: ['./app/styles/**/*.scss'],
   js: ['./app/scripts/**/*.js'],
   html: ['./app/**/*.html'],
-  lib: ['./app/lib/**/*']
+  lib: ['./app/lib/**/*'],
+  test: {
+    e2e: 'tests/e2e/**/*-spec.js'
+  }
 };
 
 gulp.task('sass', function(done) {
@@ -25,7 +31,7 @@ gulp.task('sass', function(done) {
     .pipe(gulp.dest('./www/css/'));
 });
 
-gulp.task('scripts', function(){
+gulp.task('scripts', function() {
   return gulp.src(paths.js)
     .pipe(order([
       'utility/*.js',
@@ -39,19 +45,41 @@ gulp.task('scripts', function(){
     .pipe(gulp.dest('./www/js/'));
 });
 
-gulp.task('html', function(){
+gulp.task('html', function() {
   return gulp.src(paths.html)
     .pipe(gulp.dest('./www/'));
 });
 
-gulp.task('lib', function(){
+gulp.task('lib', function() {
   return gulp.src(paths.lib)
     .pipe(gulp.dest('./www/lib'));
 });
 
-gulp.task('clean', function(){
+gulp.task('clean', function() {
   return gulp.src('./www/*.*', {read: false})
     .pipe(clean({force: true}));
+});
+
+gulp.task('webdriver:update', webdriverUpdate);
+
+gulp.task('protractor', ['webdriver:update', 'connect:test'], function() {
+  return gulp.src(paths.test.e2e)
+    .pipe(protractor({
+        configFile: 'tests/protractor.config.js',
+    }))
+    .on('error', function(e) {throw e});
+});
+
+gulp.task('connect:test', function() {
+  return connect.server({
+    root: 'www',
+    port: '8300',
+    livereload: false
+  });
+});
+
+gulp.task('test', ['protractor'], function () {
+  connect.serverClose();
 });
 
 gulp.task('watch',['default'], function() {
