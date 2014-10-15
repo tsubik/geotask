@@ -11,7 +11,7 @@ angular.module('donebytheway.controllers')
             if ($state.is('main-menu.nearby-tasks')) {
                 return taskService.findNearby();
             }
-            return taskService.getAllTasks();
+            return taskService.getNotCompleted();
         }
 
         $scope.isLoading = true;
@@ -38,6 +38,7 @@ angular.module('donebytheway.controllers')
             var selectedTasks = $scope.tasks.filter(selectedTaskFilter);
             angular.forEach(selectedTasks, function (task) {
                 taskService.markAsDone(task);
+                $scope.tasks.splice($scope.tasks.indexOf(selectedTasks), 1);
             });
             taskService.saveChanges();
             // toasty.pop.success({
@@ -52,6 +53,7 @@ angular.module('donebytheway.controllers')
             var selectedTasks = $scope.tasks.filter(selectedTaskFilter);
             angular.forEach(selectedTasks, function (task) {
                 taskService.remove(task);
+                $scope.tasks.splice($scope.tasks.indexOf(selectedTasks), 1);
             });
             taskService.saveChanges();
         };

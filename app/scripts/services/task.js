@@ -4,8 +4,6 @@ angular.module('donebytheway.services')
         var taskService = {
             _tasks: [],
             _tasksPromise: null,
-            _doneTasks: [],
-            _doneTasksPromise: null,
             createdTask: undefined,
             createNew: function () {
                 return {
@@ -21,10 +19,9 @@ angular.module('donebytheway.services')
             },
             markAsDone: function (task) {
                 var currentDate = new Date();
-                this.remove(task);
+                task.isCompleted = true;
                 task.completedDate = currentDate;
                 task.selected = undefined;
-                this._doneTasks.push(task);
             },
             syncLocationReminder: function (task) {
                 if (task.locationReminders.length > 0) {
@@ -68,7 +65,7 @@ angular.module('donebytheway.services')
                 var self = this;
                 var def = $q.defer();
                 geolocation.getCurrentPosition(function (position) {
-                    self.getAllTasks()
+                    self.getNotCompleted()
                         .then(function (tasks) {
                             return filterNearbyTasks(tasks, position, 5000);
                         })
@@ -79,6 +76,20 @@ angular.module('donebytheway.services')
                         });
                 });
                 return def.promise;
+            },
+            getNotCompleted: function () {
+                return this.getAllTasks().then(function (tasks) {
+                    return tasks.filter(function (task) {
+                        return !task.isCompleted;
+                    });
+                });
+            },
+            getCompleted: function () {
+                return this.getAllTasks().then(function (tasks) {
+                    return tasks.filter(function (task) {
+                        return task.isCompleted;
+                    });
+                });
             },
             getAllTasks: function () {
                 var self = this;
@@ -102,24 +113,8 @@ angular.module('donebytheway.services')
                 }
                 return self._tasksPromise.promise;
             },
-            getAllDoneTasks: function () {
-                var self = this;
-                if (!self._doneTasksPromise) {
-                    self._doneTasksPromise = $q.defer();
-                    storage.getItem('donebytheway-done-tasks').then(function (result) {
-                        var tasks = [];
-                        if (result) {
-                            tasks = angular.fromJson(result)
-                        }
-                        self._doneTasks = tasks;
-                        self._doneTasksPromise.resolve(tasks);
-                    });
-                }
-                return self._doneTasksPromise.promise;
-            },
             saveChanges: function () {
                 storage.setItem('donebytheway-tasks', angular.toJson(this._tasks));
-                storage.setItem('donebytheway-done-tasks', angular.toJson(this._doneTasks));
             }
         };
         return taskService;
