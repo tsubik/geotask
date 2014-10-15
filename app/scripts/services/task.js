@@ -20,7 +20,10 @@ angular.module('donebytheway.services')
                 };
             },
             markAsDone: function (task) {
+                var currentDate = new Date();
                 this.remove(task);
+                task.completedDate = currentDate;
+                task.selected = undefined;
                 this._doneTasks.push(task);
             },
             syncLocationReminder: function (task) {
@@ -41,8 +44,8 @@ angular.module('donebytheway.services')
             },
             addIfNotAdded: function (task) {
                 if (!this._tasks.firstOrDefault(function (t) {
-                    return t.id === task.id;
-                })) {
+                        return t.id === task.id;
+                    })) {
                     this._tasks.push(task);
                 }
             },

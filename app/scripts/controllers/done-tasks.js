@@ -3,6 +3,9 @@ angular.module('donebytheway.controllers')
         $scope.tasks = [];
         $scope.subTitle = 'Wykonane';
         taskService.getAllDoneTasks().then(function (tasks) {
+        	tasks.forEach(function (task) {
+        		task.selected = false;
+        	});
             $scope.tasks = tasks;
         });
     });

@@ -9,6 +9,7 @@ angular.module('donebytheway', [
     'toasty',
     'leaflet-directive',
     'angular-datepicker',
+    'angular.filter',
     'ion-search-place',
     'geolocation',
     'donebytheway.enums',

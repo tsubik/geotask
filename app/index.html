@@ -1,34 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"/>
-        <link href="css/ionic.app.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-        <link rel="stylesheet" href="lib/angular-toasty/css/ng-toasty.css" />
-        <link rel="stylesheet" href="lib/angular-native-picker/build/themes/default.css" />
-        <link rel="stylesheet" href="lib/angular-native-picker/build/themes/default.date.css" />
-        <link rel="stylesheet" href="lib/angular-native-picker/build/themes/default.time.css" />
-        <title>Do a task by the way</title>
-    </head>
-    <body>
-        <ion-nav-bar class="nav-title-slide-ios7 bar-positive">
-        </ion-nav-bar>
-        <ion-nav-view class="on-left"></ion-nav-view>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width" />
+    <link href="css/ionic.app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="lib/angular-toasty/css/ng-toasty.css" />
+    <link rel="stylesheet" href="lib/angular-native-picker/build/themes/default.css" />
+    <link rel="stylesheet" href="lib/angular-native-picker/build/themes/default.date.css" />
+    <link rel="stylesheet" href="lib/angular-native-picker/build/themes/default.time.css" />
+    <title>Do a task by the way</title>
+</head>
+
+<body>
+    <ion-nav-bar class="nav-title-slide-ios7 bar-positive">
+    </ion-nav-bar>
+    <ion-nav-view class="on-left"></ion-nav-view>
     <!-- Toasty controller, add this to your index page / default template -->
     <div ng-controller="toasty-controller">
-     <toasty-container toasty-defaults='{"timeout": 3000, "close-button": true, "pushTo": "top", "limit": 10}'></toasty-container>
-
+        <toasty-container toasty-defaults='{"timeout": 3000, "close-button": true, "pushTo": "top", "limit": 10}'></toasty-container>
     </div>
-        <div id="pickadate" data-tap-disabled="true">
-
+    <div id="pickadate" data-tap-disabled="true">
     </div>
-        <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-        <script src="lib/ionic/js/ionic.bundle.js"></script>
-        <script src="lib/ionic/js/angular/angular-resource.min.js"></script>
-        <script src="lib/angular-toasty/js/ng-toasty.js"></script>
-        <script src="lib/angular-native-picker/build/angular-datepicker.js"></script>
-        <script src="js/app.js"></script>
-        <script src="cordova.js"></script>
-    </body>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/angular-filter/dist/angular-filter.min.js"></script>
+    <script src="lib/angular-resource/angular-resource.min.js"></script>
+    <script src="lib/angular-toasty/js/ng-toasty.js"></script>
+    <script src="lib/angular-native-picker/build/angular-datepicker.js"></script>
+    <script src="js/app.js"></script>
+    <script src="cordova.js"></script>
+</body>
+
 </html>
