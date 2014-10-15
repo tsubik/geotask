@@ -42,11 +42,14 @@ form.ng-submitted input.ng-valid + i.icon.error {
 
 .map { height: 400px; }
 
+.item.preSelected {
+  background-color: $stable;
+}
 .item.selected {
-    background-color: $calm;
-    p, h2, h3 {
-        color: $light;
-    }
+  background-color: $calm;
+  p, h2, h3 {
+      color: $light;
+  }
 }
 
 button.dayofweek {
@@ -67,7 +70,7 @@ div.days-of-week{
 }
 
 .item-task-done{
-  text-decoration: line-through; 
+  text-decoration: line-through;
   font-style: italic
 }
 

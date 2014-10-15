@@ -96,6 +96,14 @@ angular.module('donebytheway.controllers')
             $scope.isSearching = false;
         };
 
+        $scope.itemTouch = function ($event) {
+            angular.element($event.target).addClass('preSelected');
+        };
+
+        $scope.itemRelease = function ($event) {
+            angular.element($event.target).removeClass('preSelected');
+        };
+
         function selectedTaskFilter(item) {
             return item.selected;
         }

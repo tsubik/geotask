@@ -1,6 +1,7 @@
 angular.module('donebytheway.controllers')
     .controller('TaskCtrl', function ($scope, task, $ionicActionSheet, $stateParams, $log, $location, $state, $ionicModal, locationService, taskRepetitionService, repetitionFrequency, taskService) {
         $scope.task = task;
+        //$scope.pickadate = angular.element(document.body);
 
         $ionicModal.fromTemplateUrl('views/task-repetition-popup.html', {
             scope: $scope,
