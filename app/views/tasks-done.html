@@ -2,16 +2,19 @@
     <ion-nav-bar class="bar-positive" animation="nav-title-slide-ios7">
         <button class="button button-icon" menu-toggle="left">
             <i class="icon ion-navicon"></i>
-            {{subTitle}}
+            Wykonane
         </button>
+        <div class="buttons pull-right">
+            <button class="button pull-right button-icon icon ion-search" ng-click="search()"></button>
+            <button class="button pull-right button-icon icon ion-plus" ng-click="addNewTask()"></button>
+        </div>
     </ion-nav-bar>
     <ion-content>
         <ion-list>
-            <div ng-repeat="(date, tasksByDate) in tasks | groupBy: 'completedDate | date : \'yyyy-MM-dd\' '">
+            <div ng-repeat="(date, tasksByDate) in filteredTasks | groupBy: 'completedDate | date : \'yyyy-MM-dd\''">
                 <div class="item item-divider">
                     {{ date }}
                 </div>
-
                 <ion-item ng-class="{selected: task.selected}" on-hold="selectTask(task)" on-tap="editTask(task)" class="item" ng-repeat="task in tasksByDate">
                     <h2>{{task.note}}</h2>
                     <p ng-if="task.locationReminders && task.locationReminders.length > 0">
@@ -20,17 +23,7 @@
                         </div>
                     </p>
                 </ion-item>
-                <!-- <div class="item item-participants" ng-show="showDetailsTransactionId == transaction.id" ng-repeat-end>
-                    <h2>Participants</h2>
-                    <img ng-repeat="participant in transaction.participants" gravatar-src="'{{participant.email}}'" />
-                </div> -->
             </div>
-        </ion-list>
-
-
-
-        <ion-list>
-
         </ion-list>
 
         <div class="card" ng-if="tasks.length === 0">
@@ -39,4 +32,32 @@
             </div>
         </div>
     </ion-content>
+
+    <div ng-if="isSearching" class="bar bar-header bar-positive item-input-inset">
+        <label class="item-input-wrapper">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="search" ng-model="$parent.filter" placeholder="Search" focus="true" id="searchInput">
+        </label>
+        <button class="button button-clear" ng-click="cancelSearch()">
+            Anuluj
+        </button>
+    </div>
+
+    <div ng-if="anyTaskSelected()" class="bar bar-positive bar-header">
+        <h1 class="title">{{ selectedTaskCount() }} Zaznaczone</h1>
+        <button class="button button-clear" ng-click="cancelSelections()">
+            Anuluj
+        </button>
+    </div>
+
+    <div class="tabs tabs-positive tabs-icon-left" ng-if="anyTaskSelected()">
+        <a class="tab-item" ng-if="onlyOneSelected()" ng-click="editSelectedTask()">
+            <i class="icon ion-edit"></i>
+            Edytuj
+        </a>
+        <a class="tab-item" ng-click="removeSelectedTasks()">
+            <i class="icon ion-trash-b"></i>
+            Usuń
+        </a>
+    </div>
 </ion-view>

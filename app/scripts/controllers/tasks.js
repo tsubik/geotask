@@ -1,6 +1,7 @@
 angular.module('donebytheway.controllers')
-    .controller('TasksCtrl', function ($scope, toasty, $state, $log, taskService) {
+    .controller('TasksCtrl', function ($scope, $filter, toasty, $state, $log, taskService) {
         $scope.tasks = [];
+        $scope.filteredTasks = [];
         if ($state.is('main-menu.nearby-tasks')) {
             $scope.subTitle = 'Zadania w pobliżu';
         } else {
@@ -10,6 +11,8 @@ angular.module('donebytheway.controllers')
         function getTasksByState() {
             if ($state.is('main-menu.nearby-tasks')) {
                 return taskService.findNearby();
+            } else if ($state.is('main-menu.done-tasks')) {
+                return taskService.getCompleted();
             }
             // else if($state.is('main-menu.today-tasks')) {
             //     return taskService.
@@ -20,8 +23,16 @@ angular.module('donebytheway.controllers')
         $scope.isLoading = true;
 
         getTasksByState().then(function (tasks) {
+            tasks.forEach(function (task) {
+                task.selected = false;
+            });
             $scope.tasks = tasks;
+            $scope.filteredTasks = $scope.tasks;
             $scope.isLoading = false;
+        });
+
+        $scope.$watch('filter', function (newValue, oldValue) {
+            $scope.filteredTasks = $filter('filterBy')($scope.tasks, ['note'], newValue);
         });
 
         $scope.addNewTask = function () {

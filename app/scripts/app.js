@@ -70,7 +70,7 @@ angular.module('donebytheway', [
                 views: {
                     'menuContent': {
                         templateUrl: 'views/tasks-done.html',
-                        controller: 'DoneTasksCtrl'
+                        controller: 'TasksCtrl'
                     }
                 }
             })
