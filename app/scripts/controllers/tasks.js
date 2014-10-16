@@ -11,6 +11,9 @@ angular.module('donebytheway.controllers')
             if ($state.is('main-menu.nearby-tasks')) {
                 return taskService.findNearby();
             }
+            // else if($state.is('main-menu.today-tasks')) {
+            //     return taskService.
+            // }
             return taskService.getNotCompleted();
         }
 

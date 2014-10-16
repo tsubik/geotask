@@ -19,7 +19,7 @@ $dark:                            #444 !default;
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
-@import "app/lib/ionic/scss/ionic";
+@import "app/components/ionic/scss/ionic";
 
 form i.icon.error {
   color: #ef4e3a; }

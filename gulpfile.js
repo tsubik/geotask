@@ -16,8 +16,8 @@ var paths = {
     sass: ['./app/styles/**/*.scss'],
     js: ['./app/scripts/**/*.js'],
     jsTest: ['./tests/utilities/*.js'],
-    html: ['./app/**/*.html'],
-    lib: ['./app/lib/**/*'],
+    html: ['./app/views/**/*.html','./app/*.html'],
+    lib: ['./app/components/**/*', './app/lib/**/*'],
     test: {
         e2e: 'tests/e2e/**/*-spec.js'
     }
@@ -42,7 +42,8 @@ gulp.task('scripts', function () {
     }
 
     return gulp.src(paths.js)
-        .pipe(order(['utility/*.js',
+        .pipe(order([
+            'utility/*.js',
             'vendor/*.js',
             'app.js',
             'factories/*.js',
@@ -54,13 +55,13 @@ gulp.task('scripts', function () {
 });
 
 gulp.task('html', function () {
-    return gulp.src(paths.html)
-        .pipe(gulp.dest('./www/'));
+    return gulp.src(paths.html, { base: 'app' })
+        .pipe(gulp.dest('./www'));
 });
 
 gulp.task('lib', function () {
     return gulp.src(paths.lib)
-        .pipe(gulp.dest('./www/lib'));
+        .pipe(gulp.dest('./www/lib/'));
 });
 
 gulp.task('clean', function () {

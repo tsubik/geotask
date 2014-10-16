@@ -56,6 +56,15 @@ angular.module('donebytheway', [
                     }
                 }
             })
+            .state('main-menu.today-tasks', {
+                url: '/today-tasks',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'views/tasks.html',
+                        controller: 'TasksCtrl'
+                    }
+                }
+            })
             .state('main-menu.done-tasks', {
                 url: '/done-tasks',
                 views: {

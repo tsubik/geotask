@@ -91,6 +91,15 @@ angular.module('donebytheway.services')
                     });
                 });
             },
+            // getForToday: function () {
+            //     return this.getAllTasks().then(function (tasks) {
+            //         return tasks.filter(function (task) {
+            //             var currentDate = new Date();
+            //             //if is today
+            //             return currentDate.toDateString() === task.
+            //         });
+            //     });
+            // },
             getAllTasks: function () {
                 var self = this;
                 if (!self._tasksPromise) {
